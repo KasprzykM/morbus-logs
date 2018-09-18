@@ -1,10 +1,35 @@
+# Built application files
+*.apk
+*.ap_
+
+
+# Java class files
+*.class
+
+# User-specific configurations [IntelliJ]
 *.iml
-.gradle
 /local.properties
 /.idea/libraries
 /.idea/modules.xml
 /.idea/workspace.xml
-.DS_Store
+/.idea/caches/build_file_checksums.ser
+
+# Gradle
+.gradle
 /build
+
+# Os specific
+.DS_Store
+
+# Android studio captures
 /captures
+
+# External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
+
+
+# Firebase
+google-services.json
+
+# Log Files
+*.log

@@ -12,6 +12,9 @@
     <!-- Login page -->
     <string name="title_activity_login">LoginActivity</string>
     <string name="sign_with_google">Sign with Google</string>
+    <string name="sign_in_cancelled">Sign in cancelled by user</string>
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="unknown_error">Unknown error!</string>
 
 
     <!-- Navigation page -->

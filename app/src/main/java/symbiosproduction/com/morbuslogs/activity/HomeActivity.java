@@ -1,9 +1,11 @@
-package symbiosproduction.com.morbuslogs;
+package symbiosproduction.com.morbuslogs.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,14 +18,19 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import symbiosproduction.com.morbuslogs.R;
 
-public class MainActivity extends AppCompatActivity
+
+public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+
+    private final String TAG = "HomeActivity";
 
 
     @Override
@@ -52,7 +59,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        TextView helloWorld = (TextView) findViewById(R.id.textView);
+        TextView helloWorld = (TextView) findViewById(R.id.helloWorldTextView);
         if(user != null)
         {
             String exampleString = getString(R.string.hello_world,user.getEmail());
@@ -113,6 +120,14 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout)
         {
+            AuthUI.getInstance()
+                    .signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d(TAG, "User has been successfully logged out");
+                        }
+                    });
+            this.finish();
             Intent intent = new Intent(this,LoginActivity.class);
             startActivity(intent);
         }

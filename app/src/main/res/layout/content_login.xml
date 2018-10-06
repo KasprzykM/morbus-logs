@@ -8,6 +8,7 @@
     tools:context=".activity.LoginActivity"
     tools:showIn="@layout/activity_login"
     android:id="@+id/loginActivityLayout"
+    android:background="@drawable/login_background"
     >
 
     <Button
@@ -18,29 +19,51 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:background="@drawable/roundedbutton"
         android:drawableStart="@drawable/fui_ic_googleg_color_24dp"
         android:onClick="onClickGoogle"
+        android:paddingStart="8dp"
         android:text="@string/sign_with_google"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.805" />
+        app:layout_constraintVertical_bias="0.666" />
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="198dp"
-        android:layout_height="162dp"
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:onClick="onClickTerms"
+        android:text="@string/terms_of_service"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/signWithGoogleButton"
+        app:layout_constraintVertical_bias="0.909" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/signWithGoogleButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/morbus" />
+        app:layout_constraintVertical_bias="0.889"
+        app:srcCompat="@drawable/logo" />
 
 </android.support.constraint.ConstraintLayout>

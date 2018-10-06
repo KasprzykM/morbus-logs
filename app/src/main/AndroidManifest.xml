@@ -19,6 +19,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name"
+            android:icon="@drawable/morbus_icon"
             android:theme="@style/AppTheme.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,7 +31,8 @@
         <!-- Home Activity -->
         <activity
             android:name=".activity.HomeActivity"
-            android:label="@string/app_name"
+            android:label="@string/home_page_label"
+            android:icon="@drawable/morbus_icon"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

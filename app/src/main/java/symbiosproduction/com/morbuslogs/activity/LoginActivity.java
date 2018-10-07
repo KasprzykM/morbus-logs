@@ -43,23 +43,29 @@ public class LoginActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+
+        constraintLayout = (ConstraintLayout) findViewById(R.id.loginActivityLayout);
+        termsTextView = (TextView) findViewById(R.id.termsOfService);
         mAuth = FirebaseAuth.getInstance();
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
         currentUser = mAuth.getCurrentUser();
         if(currentUser != null)
         {
             startHomeActivity();
         }
-
-        constraintLayout = (ConstraintLayout) findViewById(R.id.loginActivityLayout);
-        termsTextView = (TextView) findViewById(R.id.textView2);
     }
-
-
 
     private void startHomeActivity()
     {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+        this.finish();
     }
 
 
@@ -72,7 +78,6 @@ public class LoginActivity extends AppCompatActivity{
             IdpResponse response = IdpResponse.fromResultIntent(data);
 
             if (resultCode == RESULT_OK) {
-                this.finish();
                 startHomeActivity();
             } else {
                 if (response == null) {
@@ -103,7 +108,6 @@ public class LoginActivity extends AppCompatActivity{
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setTheme(R.style.AppTheme_LoginActivity)
-                        .setIsSmartLockEnabled(false)
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN);

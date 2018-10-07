@@ -31,6 +31,8 @@ public class HomeActivity extends AppCompatActivity
 
 
     private final String TAG = "HomeActivity";
+    private TextView navLoggedAsTextView;
+    private FirebaseUser user;
 
 
     @Override
@@ -58,14 +60,18 @@ public class HomeActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        TextView helloWorld = (TextView) findViewById(R.id.helloWorldTextView);
+        user = FirebaseAuth.getInstance().getCurrentUser();
+    }
+
+
+    private void updateUI()
+    {
         if(user != null)
         {
-            String exampleString = getString(R.string.hello_world,user.getEmail());
-            helloWorld.setText(exampleString);
+            navLoggedAsTextView = (TextView) findViewById(R.id.nav_header);
+            String userEmail = getString(R.string.nav_header_subtitle, user.getDisplayName());
+            navLoggedAsTextView.setText(userEmail);
         }
-
     }
 
     @Override
@@ -82,6 +88,7 @@ public class HomeActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        updateUI();
         return true;
     }
 
@@ -117,11 +124,11 @@ public class HomeActivity extends AppCompatActivity
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         public void onComplete(@NonNull Task<Void> task) {
                             Log.d(TAG, "User has been successfully logged out");
+                            Intent intent = new Intent(HomeActivity.this,LoginActivity.class);
+                            startActivity(intent);
+                            HomeActivity.this.finish();
                         }
                     });
-            this.finish();
-            Intent intent = new Intent(this,LoginActivity.class);
-            startActivity(intent);
         }
 
 

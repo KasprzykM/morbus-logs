@@ -3,10 +3,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Morbus Logs</string>
-    <string name="nav_header_subtitle">by michal0kasprzyk@gmail.com</string>
+    <string name="nav_header_subtitle">Logged as %1$s</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Greetings, %1$s!</string>
 
 
     <!-- Login page -->

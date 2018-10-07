@@ -9,9 +9,9 @@
         android:allowBackup="true"
         android:icon="@drawable/morbus_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/morbus_icon"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppTheme.GenericActivity"
         >
 
 
@@ -33,7 +33,7 @@
             android:name=".activity.HomeActivity"
             android:label="@string/home_page_label"
             android:icon="@drawable/morbus_icon"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.GenericActivity">
         </activity>
 
 

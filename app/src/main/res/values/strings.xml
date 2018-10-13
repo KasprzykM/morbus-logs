@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">Morbus Logs</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Morbus Logs</string>
-    <string name="nav_header_subtitle">Logged as %1$s</string>
-    <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
 
@@ -21,9 +16,24 @@
     <!-- Navigation page -->
     <string name="nav_logout">Logout</string>
     <string name="nav_about">About</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Morbus Logs</string>
+    <string name="nav_header_subtitle">Logged as %1$s</string>
+    <string name="nav_header_desc">Navigation header</string>
 
 
     <!-- Home page -->
     <string name="home_page_label">Home page</string>
+
+    <!-- Terms of Service - dialog -->
+    <string-array name="description_textView_tos">
+        <item> 1. Use this app at your own risk\n</item>
+        <item> 2. Before making any actions based on information through this app, contact medical professional.\n</item>
+        <item> 3. Don\'t take this app seriously - it is a students project.\n</item>
+        <item> 4. This was certainly written by a lawyer.\n</item>
+    </string-array>
+    <string name="close_button_tos">Close</string>
+    <string name="header_textView_tos"> <big><b>Terms of Service</b></big></string>
 
 </resources>

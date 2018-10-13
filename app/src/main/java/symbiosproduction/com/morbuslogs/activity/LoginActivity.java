@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import symbiosproduction.com.morbuslogs.R;
+import symbiosproduction.com.morbuslogs.dialogs.TermsOfServiceDialog;
 
 
 public class LoginActivity extends AppCompatActivity{
@@ -47,7 +48,6 @@ public class LoginActivity extends AppCompatActivity{
         constraintLayout = (ConstraintLayout) findViewById(R.id.loginActivityLayout);
         termsTextView = (TextView) findViewById(R.id.termsOfService);
         mAuth = FirebaseAuth.getInstance();
-
     }
 
 
@@ -115,6 +115,7 @@ public class LoginActivity extends AppCompatActivity{
 
 
     public void onClickTerms(View view) {
-
+        TermsOfServiceDialog dialog = new TermsOfServiceDialog();
+        dialog.show(getFragmentManager(), "Terms of Service Dialog");
     }
 }

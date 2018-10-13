@@ -30,7 +30,8 @@ public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    private final String TAG = "HomeActivity";
+    private static final String TAG = "HomeActivity";
+
     private TextView navLoggedAsTextView;
     private FirebaseUser user;
 

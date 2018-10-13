@@ -36,4 +36,10 @@
     <string name="close_button_tos">Close</string>
     <string name="header_textView_tos"> <big><b>Terms of Service</b></big></string>
 
+    <!-- Logout Dialog -->
+    <string name="message_logout_dialog">Are you sure you want to logout?</string>
+    <string name="confirm_logout_dialog">Logout</string>
+    <string name="cancel_logout_dialog">Cancel</string>
+    <string name="title_logout_dialog">Confirm logout</string>
+
 </resources>

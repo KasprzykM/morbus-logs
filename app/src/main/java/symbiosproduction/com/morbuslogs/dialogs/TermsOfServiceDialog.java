@@ -26,7 +26,6 @@ public class TermsOfServiceDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.dialog_terms_of_service,container, false);
-        //return super.onCreateView(inflater, container, savedInstanceState);
 
         mCloseButton = (Button) view.findViewById(R.id.closeButton);
         mCloseButton.setOnClickListener(new View.OnClickListener(){

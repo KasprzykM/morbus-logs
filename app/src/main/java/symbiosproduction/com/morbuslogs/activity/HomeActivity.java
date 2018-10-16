@@ -21,11 +21,20 @@ import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.Format;
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Map;
+
 import symbiosproduction.com.morbuslogs.R;
+import symbiosproduction.com.morbuslogs.database.model.patient.Gender;
+
 
 
 public class HomeActivity extends AppCompatActivity
@@ -66,14 +75,33 @@ public class HomeActivity extends AppCompatActivity
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
 
-
     private void updateUI()
     {
         if(user != null)
         {
+
             navLoggedAsTextView = (TextView) findViewById(R.id.nav_header);
             String userEmail = getString(R.string.nav_header_subtitle, user.getDisplayName());
             navLoggedAsTextView.setText(userEmail);
+            //FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+
+            Format genderTest = new MessageFormat(getResources().getString(R.string.gender_patient));
+            Gender gender = Gender.MALE;
+            test.put("gender", genderTest.format(new Object[]{gender.ordinal()}));
+
+
+            db.collection("users").document(user.getUid()).set(test).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Log.d(TAG,"Success adding something to the database..");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d(TAG, "Failed to add to database");
+                }
+            });
         }
     }
 

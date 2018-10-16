@@ -22,7 +22,6 @@
     <string name="nav_header_subtitle">Logged as %1$s</string>
     <string name="nav_header_desc">Navigation header</string>
 
-
     <!-- Home page -->
     <string name="home_page_label">Home page</string>
 
@@ -41,5 +40,8 @@
     <string name="confirm_logout_dialog">Logout</string>
     <string name="cancel_logout_dialog">Cancel</string>
     <string name="title_logout_dialog">Confirm logout</string>
+
+    <!-- Models -->
+    <string name="gender_patient">{0,choice, 0#Mezczyzna| 1#Kobieta}</string>
 
 </resources>

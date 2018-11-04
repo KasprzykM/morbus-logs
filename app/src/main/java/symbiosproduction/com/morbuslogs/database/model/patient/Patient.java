@@ -27,20 +27,26 @@ public class Patient implements DatabaseInterface {
         this.gender = gender;
     }
 
+    public Patient(FirebaseUser user)
+    {
+        this.name = user.getDisplayName();
+        this.email = user.getEmail();
+        this.Uid = user.getUid();
+    }
+
 
     @Override
     public Map<String, Object> toMap() {
 
-        Map<String, Object> mapOfPatientFields = new HashMap<>();
+        Map<String, Object> patientData = new HashMap<>();
 
-        mapOfPatientFields.put("name",name);
-        mapOfPatientFields.put("email",email);
-        mapOfPatientFields.put("age",age);
-        //@TODO:Fix gender issue.
-       // mapOfPatientFields.put("gender",gender);
+        patientData.put("name",name);
+        patientData.put("email",email);
+        patientData.put("age",age);
+        patientData.put("gender",gender.toString());
 
 
-        return mapOfPatientFields;
+        return patientData;
     }
 
     public String getUid() {

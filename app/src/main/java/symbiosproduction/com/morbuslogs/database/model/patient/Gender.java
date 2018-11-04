@@ -1,5 +1,8 @@
 package symbiosproduction.com.morbuslogs.database.model.patient;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public enum Gender {
 
 
@@ -21,4 +24,5 @@ public enum Gender {
     public String toString() {
         return gender;
     }
+
 }

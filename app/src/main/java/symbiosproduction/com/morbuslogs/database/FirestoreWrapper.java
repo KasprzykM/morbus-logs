@@ -13,15 +13,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import symbiosproduction.com.morbuslogs.database.model.patient.Patient;
 
-public class FirestoreWrapper<T extends DatabaseInterface> {
+public class FirestoreWrapper{
 
     private final FirebaseFirestore DATABASE = FirebaseFirestore.getInstance();
     private static final String TAG = "FirestoreWrapper";
     private DocumentReference documentReference;
     private Patient patientData;
-    private T t;
 
-    //@TODO: Update or create it so that you can send every object that implements DatabaseInterface
+    //@TODO: Update or create it so that you can send every object that implements DBCollection
 
 
     public void addData(Patient patient)
@@ -53,8 +52,6 @@ public class FirestoreWrapper<T extends DatabaseInterface> {
 
 
     public void updatePatient(Patient patient) {
-/*        DATABASE.collection(patient.getCollection())
-                .document(patient.getUid())*/
         documentReference.update(patient.toMap())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override

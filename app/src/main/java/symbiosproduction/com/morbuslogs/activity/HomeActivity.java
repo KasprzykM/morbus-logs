@@ -4,11 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -25,15 +25,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-
-import java.text.Format;
-import java.text.MessageFormat;
 
 import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.FirestoreWrapper;
-import symbiosproduction.com.morbuslogs.database.model.patient.Gender;
 import symbiosproduction.com.morbuslogs.database.model.patient.Patient;
+import symbiosproduction.com.morbuslogs.fragment.NewLogFragment;
 
 
 public class HomeActivity extends AppCompatActivity
@@ -53,14 +53,6 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -85,26 +77,59 @@ public class HomeActivity extends AppCompatActivity
 
             FirebaseUserMetadata metadata = user.getMetadata();
             // User is signed in for the first time
+            //      getCreationTimestamp() currently is bugged, see attached link.
+            //      https://stackoverflow.com/questions/48079683/firebase-user-returns-null-metadata-for-already-signed-up-users
             if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
-                FirestoreWrapper firestoreWrapper = new FirestoreWrapper<>();
+                //@TODO: Add dialog to fill in sex and age of patient.
+                FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
                 Patient newPatient = new Patient(user);
-
-
                 firestoreWrapper.addData(newPatient);
                 firestoreWrapper.sendPatientToDatabase(newPatient);
-                //test.put("gender", genderTest.format(new Object[]{gender.ordinal()}));
             }
             else
             {
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+/*                int intensity = 9;
+                PainType painType = PainType.SOFT_TISSUE_PAIN;
+                String testDescription = " test description \n + test description after backlash 'n' \t ";
+                String testDescription2 = " test2  description \n + test2 description after backlash 'n' \t ";
+                Long duration = 1923124L;
+                SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+                String testDateNow = ISO_8601_FORMAT.format(Calendar.getInstance().getTime());
+                String testDateNow2 = ISO_8601_FORMAT.format(new Date());
+                PainSymptom symptomTest = new PainSymptom(intensity,painType,testDescription,duration,testDateNow);
+                PainSymptom symptomTest2 = new PainSymptom(intensity+1,PainType.ACUTE_PAIN,testDescription2,duration+3,testDateNow2);
 
+                SymptomsLog logTest = new SymptomsLog(testDateNow,testDateNow2);
+                logTest.addSymptom(symptomTest);
+                logTest.addSymptom(symptomTest2);
 
-                Format genderTest = new MessageFormat(getResources().getString(R.string.gender_patient));
-                Gender gender = Gender.FEMALE;
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection(logTest.getCollection())
+                        .document(user.getUid())
+                        .collection("userLogs")
+                        .document(logTest.getDateOfSubmission())
+                        .set(logTest.toMap());*/
 
-                Patient test = new Patient(user,21,gender);
-
-
-
+//                db.collection("Logs")
+//                        .document(user.getUid())
+//                        .collection("userLogs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if(task.isSuccessful())
+//                        {
+//                            for(QueryDocumentSnapshot document: task.getResult())
+//                            {
+//                                Log.d(TAG,document.getId() + " => " + document.getData());
+//                            }
+//                        }
+//                        else
+//                        {
+//                            Log.d(TAG,"Error getting documents: ", task.getException());
+//                        }
+//                    }
+//                });
+                boolean test = true;
             }
 
         }
@@ -145,9 +170,13 @@ public class HomeActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
+        Fragment fragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         if (id == R.id.nav_share) {
             // Handle the camera action
@@ -155,10 +184,18 @@ public class HomeActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_logout)
         {
-            createDialog();
+            createLogoutDialog();
+        }
+        else if (id == R.id.nav_add_new_log)
+        {
+            fragment = new NewLogFragment();
+            fragmentTransaction.replace(R.id.frame_layout_content_main,fragment);
+            fragmentTransaction.addToBackStack(null); //stops fragment instead of destroying it
         }
 
-
+        if(fragment != null) {
+            fragmentTransaction.commit();
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -166,7 +203,7 @@ public class HomeActivity extends AppCompatActivity
 
 
 
-    private void createDialog()
+    private void createLogoutDialog()
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this, android.R.style.Theme_Material_Dialog_Alert);
         alertDialogBuilder.setMessage(R.string.message_logout_dialog);

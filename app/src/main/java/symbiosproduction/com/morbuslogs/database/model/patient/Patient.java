@@ -5,9 +5,10 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.HashMap;
 import java.util.Map;
 
-import symbiosproduction.com.morbuslogs.database.DatabaseInterface;
+import symbiosproduction.com.morbuslogs.database.DBCollection;
+import symbiosproduction.com.morbuslogs.database.ToMap;
 
-public class Patient implements DatabaseInterface {
+public class Patient implements DBCollection,ToMap {
 
     private String name;
     private String email;
@@ -15,7 +16,7 @@ public class Patient implements DatabaseInterface {
     private Integer age;
     private Gender gender;
 
-    private static final String DB_COLLECTION = "Patients";
+    private static final String DB_COLLECTION_PATIENTS = "Patients";
 
 
     public Patient(FirebaseUser user, Integer age, Gender gender)
@@ -42,8 +43,11 @@ public class Patient implements DatabaseInterface {
 
         patientData.put("name",name);
         patientData.put("email",email);
-        patientData.put("age",age);
-        patientData.put("gender",gender.toString());
+
+        if(age != null)
+            patientData.put("age", age);
+        if(gender != null)
+            patientData.put("gender",gender.toString());
 
 
         return patientData;
@@ -55,6 +59,6 @@ public class Patient implements DatabaseInterface {
 
     @Override
     public String getCollection() {
-        return DB_COLLECTION;
+        return DB_COLLECTION_PATIENTS;
     }
 }

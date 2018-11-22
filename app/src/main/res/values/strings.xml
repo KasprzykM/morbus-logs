@@ -42,17 +42,18 @@
     <string name="title_logout_dialog">Confirm logout</string>
 
     <!-- Models -->
-    <string name="gender_patient">{0,choice, 0#Mezczyzna| 1#Kobieta}</string>
+    <string name="gender_patient">{0,choice, 0#Male| 1#Female}</string>
 
 
     <!-- New Symptom Fragment -->
     <string-array name="symptom_array">
-        <item>Pain Symptom</item>
-        <item>Abnormal Temperature (Fever etc.)</item>
+        <item>Pain</item>
+        <item>Temperature (Fever etc.)</item>
     </string-array>
     <string name="symptom_name">Choose symptom:</string>
     <string name="date_chooser_symptom">Date of Occurrence:</string>
     <string name="date_button_symptom">Click to choose.</string>
+    <string name="date_chosen_symptom">%d / %d / %d</string>
     <string name="duration_symptom">Duration:</string>
     <string-array name="duration_array_symptom">
         <item>Seconds</item>

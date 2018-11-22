@@ -6,9 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/default_background"
-    tools:context=".fragment.NewSymptomFragment"
+    tools:context=".fragment.symptom.NewSymptomFragment"
     tools:layout_editor_absoluteY="25dp">
 
+
+    <!-- TODO: Define landscape layout for this layout -->
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/symptomChooserLayout"
@@ -52,6 +54,7 @@
             android:layout_height="34dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
+            android:onClick="onClickDateChooser"
             android:background="@drawable/roundedbutton"
             android:gravity="center"
             android:text="@string/date_button_symptom"
@@ -137,6 +140,7 @@
             android:layout_marginBottom="8dp"
             android:ems="10"
             android:gravity="start|top"
+            android:background="@android:color/white"
             android:inputType="textMultiLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

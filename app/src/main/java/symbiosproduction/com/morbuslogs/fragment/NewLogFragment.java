@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import symbiosproduction.com.morbuslogs.R;
+import symbiosproduction.com.morbuslogs.fragment.symptom.NewSymptomFragment;
 
 
 public class NewLogFragment extends Fragment {

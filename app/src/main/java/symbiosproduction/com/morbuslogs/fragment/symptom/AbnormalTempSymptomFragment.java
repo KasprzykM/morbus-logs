@@ -1,4 +1,4 @@
-package symbiosproduction.com.morbuslogs.fragment;
+package symbiosproduction.com.morbuslogs.fragment.symptom;
 
 
 import android.os.Bundle;
@@ -13,10 +13,10 @@ import symbiosproduction.com.morbuslogs.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PainSymptomFragment extends Fragment {
+public class AbnormalTempSymptomFragment extends Fragment {
 
 
-    public PainSymptomFragment() {
+    public AbnormalTempSymptomFragment() {
         // Required empty public constructor
     }
 
@@ -25,7 +25,7 @@ public class PainSymptomFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.pain_symptom_fragment, container, false);
+        return inflater.inflate(R.layout.abnormal_temp_symptom_fragment, container, false);
     }
 
 }

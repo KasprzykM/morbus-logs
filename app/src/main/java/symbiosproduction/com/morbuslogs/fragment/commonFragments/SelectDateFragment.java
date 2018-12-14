@@ -3,13 +3,13 @@ package symbiosproduction.com.morbuslogs.fragment.commonFragments;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.app.DatePickerDialog;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.widget.Button;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
 
-import symbiosproduction.com.morbuslogs.R;
 
 public class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
@@ -19,6 +19,7 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
     private Integer dayOfMonth;
     private Button button;
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Calendar calendar = Calendar.getInstance();
@@ -37,7 +38,7 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
 
     private void populateSetDate()
     {
-        button.setText(dayOfMonth+"/"+month+"/"+year);
+        button.setText(getStringDate());
     }
 
     public void setButton(Button button)
@@ -56,6 +57,10 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
 
     public Integer getDayOfMonth() {
         return dayOfMonth;
+    }
+
+    public String getStringDate(){
+        return dayOfMonth+"/"+month+"/"+year;
     }
 
 }

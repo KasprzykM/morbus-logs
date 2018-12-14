@@ -2,8 +2,8 @@ package symbiosproduction.com.morbuslogs.fragment.symptom;
 
 
 import java.util.Calendar;
-import java.util.TimeZone;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,24 +12,29 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import symbiosproduction.com.morbuslogs.R;
+import symbiosproduction.com.morbuslogs.database.model.symptoms.pain.PainType;
 import symbiosproduction.com.morbuslogs.fragment.commonFragments.SelectDateFragment;
+import symbiosproduction.com.morbuslogs.fragment.symptom.OnItemSelectedListeners.DurationOnItemSelectedListener;
 
 public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
 
-
     private Button datePickerButton;
-    private Spinner symptomSpinner;
     private Spinner durationSpinner;
     private Calendar calendar;
     private SelectDateFragment selectDateFragment;
+    private EditText durationInput;
+    private EditText descriptionInput;
+
 
     private static final String TAG = "NewSymptomFragment";
 
@@ -48,10 +53,60 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initSpinners(view);
         initDatePicker(view);
+        initEditText(view);
+        submitButton(view);
+    }
 
+    public void initEditText(View view)
+    {
+        View.OnFocusChangeListener focusChanger = new View.OnFocusChangeListener(){
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                {
+                    hideKeyboard(v);
+                }
+            }
+        };
+        descriptionInput = (EditText) view.findViewById(R.id.descriptionInput);
+        descriptionInput.setOnFocusChangeListener(focusChanger);
+        durationInput = (EditText) view.findViewById(R.id.durationValueInput);
+        durationInput.setOnFocusChangeListener(focusChanger);
+    }
+
+    public void submitButton(View view)
+    {
+        Button submitButton = (Button) view.findViewById(R.id.submit_button);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(durationInput.getText().length() <= 0 || datePickerButton.getText().equals(getString(R.string.date_button_symptom)))
+                {
+                    Toast.makeText(getContext(), R.string.unfilled_fields_toast, Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                Long duration = Long.parseLong(durationInput.getText().toString());
+                String durationType = durationSpinner.getSelectedItem().toString();
+                String description = descriptionInput.getText().toString();
+                String date = selectDateFragment.getStringDate();
+
+                Fragment specificSymptomFragment = getChildFragmentManager().getFragments().get(0);
+                if(specificSymptomFragment instanceof PainSymptomFragment)
+                {
+                    String painIntensity = ((PainSymptomFragment) specificSymptomFragment).getSelectedIntensity();
+                    String stringToPainEnum = ((PainSymptomFragment) specificSymptomFragment).getSelectedPainType()
+                            .toUpperCase().replace(" ", "_");
+                    PainType painType = PainType.valueOf(stringToPainEnum);
+
+                    //PainSymptom painSymptom = new PainSymptom(painIntensity,Pain)
+                }
+            }
+
+        });
     }
 
     public void initDatePicker(View view)
@@ -75,7 +130,7 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
 
     public void initSpinners(View view)
     {
-        symptomSpinner = (Spinner) view.findViewById(R.id.symptomNameSpinner);
+        Spinner symptomSpinner = (Spinner) view.findViewById(R.id.symptomNameSpinner);
         ArrayAdapter<CharSequence> symptomAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.symptom_array, android.R.layout.simple_spinner_item);
         symptomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -83,7 +138,7 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
         symptomSpinner.setOnItemSelectedListener(this);
 
 
-        durationSpinner = (Spinner) view.findViewById(R.id.durationSpinner);
+        durationSpinner = (Spinner) view.findViewById(R.id.timeUnitSpinner);
         ArrayAdapter<CharSequence> durationAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.duration_array_symptom, android.R.layout.simple_spinner_item);
         durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -93,31 +148,37 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Fragment fragment = null;
         switch(position)
         {
             //Pain
             case 0: {
-                getChildFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.symptomOptionsLayout, new PainSymptomFragment())
-                        .commit();
+                fragment = new PainSymptomFragment();
                 break;
             }
             //Abnormal Temp
-            case 1:
-            {
-                getChildFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.symptomOptionsLayout, new AbnormalTempSymptomFragment())
-                        .commit();
+            case 1: {
+                fragment = new AbnormalTempSymptomFragment();
+                break;
             }
             default:
                 break;
         }
+        if(fragment != null)
+            getChildFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.symptomOptionsLayout, fragment, fragment.getTag())
+                    .commit();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
+    public void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
 }

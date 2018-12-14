@@ -2,12 +2,14 @@ package symbiosproduction.com.morbuslogs.database.model.symptoms.pain;
 
 public enum PainType {
 
-    ACUTE_PAIN("Acute pain"),
-    CHRONIC_PAIN("Chronic pain"),
-    BREAKTHROUGH_PAIN("Breakthrough pain"),
-    BONE_PAIN("Bone pain"),
-    SOFT_TISSUE_PAIN("Soft tissue pain"),
-    PHANTOM_PAIN("Phantom pain");
+    ACUTE("Acute"),
+    CHRONIC("Chronic"),
+    BREAKTHROUGH("Breakthrough"),
+    BONE("Bone"),
+    SOFT_TISSUE("Soft tissue"),
+    NERVE("Nerve"),
+    REFERRED("Referred"),
+    PHANTOM("Phantom");
 
     private final String painType;
 

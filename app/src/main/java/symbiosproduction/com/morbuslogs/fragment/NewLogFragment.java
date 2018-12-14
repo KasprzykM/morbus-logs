@@ -52,4 +52,5 @@ public class NewLogFragment extends Fragment {
             }
         });
     }
+
 }

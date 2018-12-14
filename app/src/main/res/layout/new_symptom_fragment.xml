@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     android:background="@drawable/default_background"
     tools:context=".fragment.symptom.NewSymptomFragment"
+    android:clickable="true"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
     tools:layout_editor_absoluteY="25dp">
 
 
@@ -31,6 +34,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/spinner_background"
+            android:popupBackground="@drawable/spinner_popup_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,7 +58,6 @@
             android:layout_height="34dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8dp"
-            android:onClick="onClickDateChooser"
             android:background="@drawable/roundedbutton"
             android:gravity="center"
             android:text="@string/date_button_symptom"
@@ -99,7 +102,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <Spinner
-            android:id="@+id/durationSpinner"
+            android:id="@+id/timeUnitSpinner"
             android:layout_width="114dp"
             android:layout_height="23dp"
             android:layout_marginStart="8dp"
@@ -107,6 +110,7 @@
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/spinner_background"
+            android:popupBackground="@drawable/spinner_popup_background"
             app:layout_constraintBottom_toBottomOf="@+id/descriptionTextView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -140,7 +144,7 @@
             android:layout_marginBottom="8dp"
             android:ems="10"
             android:gravity="start|top"
-            android:background="@android:color/white"
+            android:background="@drawable/rounded_edit_text"
             android:inputType="textMultiLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -161,7 +165,7 @@
             android:gravity="start|bottom"
             android:inputType="numberSigned"
             app:layout_constraintBottom_toTopOf="@+id/descriptionTextView"
-            app:layout_constraintEnd_toStartOf="@+id/durationSpinner"
+            app:layout_constraintEnd_toStartOf="@+id/timeUnitSpinner"
             app:layout_constraintStart_toEndOf="@+id/durationTextView"
             app:layout_constraintTop_toBottomOf="@+id/dateChooserTextView"
             app:layout_constraintVertical_bias="0.772" />
@@ -185,5 +189,23 @@
         app:layout_constraintVertical_bias="0.0">
 
     </android.support.constraint.ConstraintLayout>
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/roundedbutton"
+        android:text="Test"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.186"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/symptomOptionsLayout"
+        app:layout_constraintVertical_bias="0.529" />
 
 </android.support.constraint.ConstraintLayout>

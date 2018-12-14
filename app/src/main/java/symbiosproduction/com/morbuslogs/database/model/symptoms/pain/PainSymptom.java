@@ -8,7 +8,7 @@ import symbiosproduction.com.morbuslogs.database.model.symptoms.AbstractSymptom;
 
 public final class PainSymptom extends AbstractSymptom {
 
-    private Integer intensity;
+    private String intensity;
     private PainType painType;
 
     private final String SYMPTOM_NAME = "Pain";
@@ -19,16 +19,17 @@ public final class PainSymptom extends AbstractSymptom {
     }
     //@TODO: Add picture of pain area?
 
-    public PainSymptom(Integer intensity,
+    public PainSymptom(String intensity,
                        PainType painType,
                        String description,
                        Long duration,
-                       String dateOfOccurance) {
+                       String timeUnit,
+                       String dateOfOccurrence) {
 
         this.intensity = intensity;
         this.painType = painType;
-        this.dateOfOccurrence = dateOfOccurance;
-        this.duration = duration;
+        this.dateOfOccurrence = dateOfOccurrence;
+        this.duration = calculateDuration(duration,timeUnit);
         this.description = description;
     }
 

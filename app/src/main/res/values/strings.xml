@@ -64,6 +64,7 @@
         <item>Months</item>
     </string-array>
     <string name="description_symptom">Description</string>
+    <string name="unfilled_fields_toast">Please fill all empty fields!</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_new_log_placeholder"> !PLACEHOLDER! Tutaj bedzie lista symptomow !PLACEHOLDER! </string>
@@ -73,5 +74,26 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Pain Symptom Fragment -->
+    <string name="pain_intensity">Intensity:</string>
+    <string-array name="pain_intensity_array">
+        <item>No pain</item>
+        <item>Mild</item>
+        <item>Moderate</item>
+        <item>Intense</item>
+        <item>Maximum</item>
+    </string-array>
+    <string name="pain_type">Pain type:</string>
+    <string-array name="pain_type_array">
+        <item>Acute</item>
+        <item>Chronic</item>
+        <item>Breakthrough</item>
+        <item>Bone</item>
+        <item>Soft Tissue</item>
+        <item>Nerve</item>
+        <item>Referred</item>
+        <item>Phantom</item>
+    </string-array>
 
 </resources>

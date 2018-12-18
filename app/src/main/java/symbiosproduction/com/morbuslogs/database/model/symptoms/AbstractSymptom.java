@@ -1,18 +1,21 @@
 package symbiosproduction.com.morbuslogs.database.model.symptoms;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import symbiosproduction.com.morbuslogs.database.ToMap;
 
-public abstract class AbstractSymptom implements ToMap {
+public abstract class AbstractSymptom implements ToMap,Parcelable {
 
         protected String dateOfOccurrence;
         protected Long duration;
         protected String description;
-        protected String SYMPTOM_NAME;
+        protected String symptomName;
 
     public String getSymptomName()
     {
-        return SYMPTOM_NAME;
+        return symptomName;
     }
 
     public String getDateOfOccurrence() {
@@ -66,4 +69,31 @@ public abstract class AbstractSymptom implements ToMap {
         return duration;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(dateOfOccurrence);
+        dest.writeLong(duration);
+        dest.writeString(description);
+        dest.writeString(symptomName);
+    }
+
+    public  AbstractSymptom(String dateOfOccurrence, String timeUnit, Long duration, String description, String symptomName){
+        this.dateOfOccurrence = dateOfOccurrence;
+        this.duration = calculateDuration(duration,timeUnit);
+        this.description = description;
+        this.symptomName = symptomName;
+    }
+
+    protected AbstractSymptom(Parcel in)
+    {
+       dateOfOccurrence = in.readString();
+       duration = in.readLong();
+       description = in.readString();
+       symptomName = in.readString();
+    }
 }

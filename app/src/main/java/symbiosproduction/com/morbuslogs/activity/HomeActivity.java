@@ -26,14 +26,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 
 import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.FirestoreWrapper;
 import symbiosproduction.com.morbuslogs.database.model.patient.Patient;
-import symbiosproduction.com.morbuslogs.fragment.NewLogFragment;
+import symbiosproduction.com.morbuslogs.fragment.logs.NewLogFragment;
 
 
 public class HomeActivity extends AppCompatActivity

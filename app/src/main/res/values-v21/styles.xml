@@ -10,7 +10,7 @@
     <style name="AppTheme.GenericActivity">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">#476BB2</item>
         <item name="buttonStyle">@drawable/roundedbutton</item>
         <item name="android:statusBarColor">@android:color/black</item>
     </style>

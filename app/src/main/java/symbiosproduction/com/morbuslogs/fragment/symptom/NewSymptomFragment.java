@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,19 +22,25 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import symbiosproduction.com.morbuslogs.R;
+import symbiosproduction.com.morbuslogs.database.model.symptoms.AbstractSymptom;
+import symbiosproduction.com.morbuslogs.database.model.symptoms.pain.PainSymptom;
 import symbiosproduction.com.morbuslogs.database.model.symptoms.pain.PainType;
 import symbiosproduction.com.morbuslogs.fragment.commonFragments.SelectDateFragment;
 import symbiosproduction.com.morbuslogs.fragment.symptom.OnItemSelectedListeners.DurationOnItemSelectedListener;
+
+import static android.app.Activity.RESULT_OK;
 
 public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
 
     private Button datePickerButton;
     private Spinner durationSpinner;
-    private Calendar calendar;
+    private Spinner symptomSpinner;
     private SelectDateFragment selectDateFragment;
     private EditText durationInput;
     private EditText descriptionInput;
+    private AbstractSymptom symptom;
+    private static final String SYMPTOM_BUNDLE_CONSTANT = "symptom";
 
 
     private static final String TAG = "NewSymptomFragment";
@@ -89,21 +96,44 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
                     return;
                 }
 
+
+                // Initial data for abstract symptom
                 Long duration = Long.parseLong(durationInput.getText().toString());
-                String durationType = durationSpinner.getSelectedItem().toString();
+                String timeUnit = durationSpinner.getSelectedItem().toString();
                 String description = descriptionInput.getText().toString();
                 String date = selectDateFragment.getStringDate();
+                String symptomName = symptomSpinner.getSelectedItem().toString();
 
+
+                // Get fragment that has been chosen by user and fetch its data
                 Fragment specificSymptomFragment = getChildFragmentManager().getFragments().get(0);
+
+                // Construct PainSymptom Object
                 if(specificSymptomFragment instanceof PainSymptomFragment)
                 {
                     String painIntensity = ((PainSymptomFragment) specificSymptomFragment).getSelectedIntensity();
                     String stringToPainEnum = ((PainSymptomFragment) specificSymptomFragment).getSelectedPainType()
                             .toUpperCase().replace(" ", "_");
                     PainType painType = PainType.valueOf(stringToPainEnum);
-
-                    //PainSymptom painSymptom = new PainSymptom(painIntensity,Pain)
+                    symptom = new PainSymptom(painIntensity ,painType
+                            ,description, duration
+                            ,timeUnit
+                            ,date,
+                            symptomName);
                 }
+
+
+                //Go back to new log fragment
+                if(symptom != null) {
+                    Intent intent = new Intent(getContext(), NewSymptomFragment.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable(SYMPTOM_BUNDLE_CONSTANT, symptom);
+                    //test.putExtra("symptom", symptom);
+                    intent.putExtras(bundle);
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, intent);
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
+
             }
 
         });
@@ -130,7 +160,7 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
 
     public void initSpinners(View view)
     {
-        Spinner symptomSpinner = (Spinner) view.findViewById(R.id.symptomNameSpinner);
+        symptomSpinner = (Spinner) view.findViewById(R.id.symptomNameSpinner);
         ArrayAdapter<CharSequence> symptomAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.symptom_array, android.R.layout.simple_spinner_item);
         symptomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

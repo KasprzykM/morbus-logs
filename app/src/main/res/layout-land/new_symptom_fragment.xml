@@ -18,12 +18,12 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/symptomChooserLayout"
         android:layout_width="347dp"
-        android:layout_height="312dp"
+        android:layout_height="273dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -91,7 +91,7 @@
             android:id="@+id/durationTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="24dp"
             android:layout_marginTop="28dp"
             android:layout_marginBottom="8dp"
             android:text="@string/duration_symptom"
@@ -136,22 +136,22 @@
 
         <EditText
             android:id="@+id/descriptionInput"
-            android:layout_width="327dp"
-            android:layout_height="128dp"
+            android:layout_width="272dp"
+            android:layout_height="85dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/rounded_edit_text"
             android:ems="10"
             android:gravity="start|top"
-            android:background="@drawable/rounded_edit_text"
             android:inputType="textMultiLine"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.47"
+            app:layout_constraintHorizontal_bias="0.491"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.955" />
+            app:layout_constraintVertical_bias="0.954" />
 
         <EditText
             android:id="@+id/durationValueInput"
@@ -166,26 +166,27 @@
             android:inputType="numberSigned"
             app:layout_constraintBottom_toTopOf="@+id/descriptionTextView"
             app:layout_constraintEnd_toStartOf="@+id/timeUnitSpinner"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/durationTextView"
             app:layout_constraintTop_toBottomOf="@+id/dateChooserTextView"
-            app:layout_constraintVertical_bias="0.772" />
+            app:layout_constraintVertical_bias="0.0" />
 
 
     </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/symptomOptionsLayout"
-        android:layout_width="347dp"
-        android:layout_height="171dp"
+        android:layout_width="207dp"
+        android:layout_height="131dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="72dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.692"
+        app:layout_constraintHorizontal_bias="0.021"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/symptomChooserLayout"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
     </android.support.constraint.ConstraintLayout>
@@ -203,8 +204,9 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.157"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/symptomOptionsLayout"
-        app:layout_constraintVertical_bias="0.529" />
+        app:layout_constraintVertical_bias="0.275" />
 
 </android.support.constraint.ConstraintLayout>

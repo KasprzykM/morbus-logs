@@ -66,8 +66,10 @@
     <string name="description_symptom">Description</string>
     <string name="unfilled_fields_toast">Please fill all empty fields!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_new_log_placeholder"> !PLACEHOLDER! Tutaj bedzie lista symptomow !PLACEHOLDER! </string>
+    <!-- New Log Fragment -->
+    <string name="add_new_symptom">Add new symptom</string>
+    <string name="log_item_symp_name_tv">Name:</string>
+    <string name="log_item_date_tv">Date:</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_fill_symptom_placeholder">!PLACEHOLDER! Tutaj bedzie mozliwosc dodania symptomu !PLACEHOLDER! </string>

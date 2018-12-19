@@ -61,11 +61,20 @@ public final class PainSymptom extends AbstractSymptom {
         dataMap.put("symptomName", symptomName);
         dataMap.put("dateOfOccurrence", dateOfOccurrence);
         dataMap.put("duration", duration);
+        dataMap.put("timeUnit", timeUnit);
         dataMap.put("description", description);
         dataMap.put("intensity", intensity);
         dataMap.put("painType", painType.toString());
 
 
         return dataMap;
+    }
+
+    public String getIntensity() {
+        return intensity;
+    }
+
+    public PainType getPainType() {
+        return painType;
     }
 }

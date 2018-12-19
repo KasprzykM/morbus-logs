@@ -10,8 +10,14 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
 
         protected String dateOfOccurrence;
         protected Long duration;
+        protected String timeUnit;
         protected String description;
         protected String symptomName;
+
+
+    public String getTimeUnit() {
+        return timeUnit;
+    }
 
     public String getSymptomName()
     {
@@ -80,13 +86,15 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
         dest.writeLong(duration);
         dest.writeString(description);
         dest.writeString(symptomName);
+        dest.writeString(timeUnit);
     }
 
     public  AbstractSymptom(String dateOfOccurrence, String timeUnit, Long duration, String description, String symptomName){
         this.dateOfOccurrence = dateOfOccurrence;
-        this.duration = calculateDuration(duration,timeUnit);
+        this.duration = duration;
         this.description = description;
         this.symptomName = symptomName;
+        this.timeUnit = timeUnit;
     }
 
     protected AbstractSymptom(Parcel in)
@@ -95,5 +103,6 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
        duration = in.readLong();
        description = in.readString();
        symptomName = in.readString();
+       timeUnit = in.readString();
     }
 }

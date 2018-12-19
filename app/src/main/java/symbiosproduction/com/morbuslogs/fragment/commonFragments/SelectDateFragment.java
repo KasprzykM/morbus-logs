@@ -63,4 +63,12 @@ public class SelectDateFragment extends DialogFragment implements DatePickerDial
         return dayOfMonth+"/"+month+"/"+year;
     }
 
+    public void stringToDate(String date){
+        String splitDate[] = date.split("/");
+        dayOfMonth = Integer.valueOf(splitDate[0]);
+        month = Integer.valueOf(splitDate[1]);
+        year = Integer.valueOf(splitDate[2]);
+        populateSetDate();
+    }
+
 }

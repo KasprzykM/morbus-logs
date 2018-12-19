@@ -25,6 +25,7 @@ import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.model.symptoms.AbstractSymptom;
 import symbiosproduction.com.morbuslogs.database.model.symptoms.pain.PainSymptom;
 import symbiosproduction.com.morbuslogs.database.model.symptoms.pain.PainType;
+import symbiosproduction.com.morbuslogs.database.model.symptoms.temperature.AbnormalTempSymptom;
 import symbiosproduction.com.morbuslogs.fragment.commonFragments.SelectDateFragment;
 import symbiosproduction.com.morbuslogs.fragment.symptom.OnItemSelectedListeners.DurationOnItemSelectedListener;
 
@@ -32,7 +33,7 @@ import static android.app.Activity.RESULT_OK;
 
 public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
-
+    private Button submitButton;
     private Button datePickerButton;
     private Spinner durationSpinner;
     private Spinner symptomSpinner;
@@ -40,9 +41,12 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
     private EditText durationInput;
     private EditText descriptionInput;
     private AbstractSymptom symptom;
+    private ArrayAdapter<CharSequence> symptomAdapter;
+    private ArrayAdapter<CharSequence> durationAdapter;
+
+    private Boolean isEditing = false;
+
     private static final String SYMPTOM_BUNDLE_CONSTANT = "symptom";
-
-
     private static final String TAG = "NewSymptomFragment";
 
     public NewSymptomFragment() {
@@ -64,6 +68,45 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
         initDatePicker(view);
         initEditText(view);
         submitButton(view);
+        editCallback(view);
+    }
+
+    public void editCallback(View view){
+        Bundle bundle = getArguments();
+        if(bundle != null)
+        {
+            // Flag so fragment doesn't get created twice..
+            isEditing = true;
+            // Fetch symptom from bundle
+            AbstractSymptom symptomToEdit = bundle.getParcelable("symptomToEdit");
+
+            // fill all necessary fields
+            int symptomPosSpinner = symptomAdapter.getPosition(symptomToEdit.getSymptomName());
+            int durationPosSpinner = durationAdapter.getPosition(symptomToEdit.getTimeUnit());
+            durationInput.setText(symptomToEdit.getDuration().toString());
+            descriptionInput.setText(symptomToEdit.getDescription());
+            selectDateFragment.stringToDate(symptomToEdit.getDateOfOccurrence());
+            symptomSpinner.setSelection(symptomPosSpinner);
+            durationSpinner.setSelection(durationPosSpinner);
+            submitButton.setText(R.string.confirm_changes_symptom_button);
+
+
+            // get sub fragment for specific symptom
+            Fragment specificSymptomFragment = addSpecificSymptomFragment(symptomPosSpinner);
+
+            if(specificSymptomFragment instanceof PainSymptomFragment && symptomToEdit instanceof PainSymptom)
+            {
+                PainSymptom painSymptomToEdit = (PainSymptom) symptomToEdit;
+                ((PainSymptomFragment) specificSymptomFragment).setSelectedIntensity(painSymptomToEdit.getIntensity());
+                ((PainSymptomFragment) specificSymptomFragment).setSelectedPainType(painSymptomToEdit.getPainType().toString());
+            }
+
+            if(specificSymptomFragment instanceof AbnormalTempSymptomFragment && symptomToEdit instanceof AbnormalTempSymptom)
+            {
+                AbnormalTempSymptom abnormalTempSymptomToEdit = (AbnormalTempSymptom) symptomToEdit;
+                ((AbnormalTempSymptomFragment) specificSymptomFragment).setTemperatureInput(abnormalTempSymptomToEdit.getTempInCelsius());
+            }
+        }
     }
 
     public void initEditText(View view)
@@ -85,7 +128,8 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
 
     public void submitButton(View view)
     {
-        Button submitButton = (Button) view.findViewById(R.id.submit_button);
+        submitButton = (Button) view.findViewById(R.id.submit_button);
+        submitButton.setText(R.string.add_symptom_button);
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +165,18 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
                             ,date,
                             symptomName);
                 }
+                else if(specificSymptomFragment instanceof AbnormalTempSymptomFragment)
+                {
+                    int tempValue = ((AbnormalTempSymptomFragment) specificSymptomFragment).getTemperatureInput();
+                    int MIN_TEMP = 23;
+                    int MAX_TEMP = 45;
+                    if(tempValue >= MAX_TEMP || tempValue <= MIN_TEMP)
+                    {
+                        Toast.makeText(getContext(), R.string.incorrect_temp_toast, Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    symptom = new AbnormalTempSymptom(date,duration,timeUnit,description,tempValue,symptomName);
+                }
 
 
                 //Go back to new log fragment
@@ -128,7 +184,6 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
                     Intent intent = new Intent(getContext(), NewSymptomFragment.class);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(SYMPTOM_BUNDLE_CONSTANT, symptom);
-                    //test.putExtra("symptom", symptom);
                     intent.putExtras(bundle);
                     getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, intent);
                     getActivity().getSupportFragmentManager().popBackStack();
@@ -142,12 +197,12 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
     public void initDatePicker(View view)
     {
         datePickerButton = (Button) view.findViewById(R.id.dateChooserButton);
+        selectDateFragment = new SelectDateFragment();
+        selectDateFragment.setButton(datePickerButton);
         datePickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Calendar cal = Calendar.getInstance();
-                selectDateFragment = new SelectDateFragment();
-                selectDateFragment.setButton(datePickerButton);
                 DatePickerDialog datePicker = new DatePickerDialog(getActivity(),
                         selectDateFragment,
                         cal.get(Calendar.YEAR),
@@ -161,7 +216,7 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
     public void initSpinners(View view)
     {
         symptomSpinner = (Spinner) view.findViewById(R.id.symptomNameSpinner);
-        ArrayAdapter<CharSequence> symptomAdapter = ArrayAdapter.createFromResource(getActivity(),
+        symptomAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.symptom_array, android.R.layout.simple_spinner_item);
         symptomAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         symptomSpinner.setAdapter(symptomAdapter);
@@ -169,7 +224,7 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
 
 
         durationSpinner = (Spinner) view.findViewById(R.id.timeUnitSpinner);
-        ArrayAdapter<CharSequence> durationAdapter = ArrayAdapter.createFromResource(getActivity(),
+        durationAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.duration_array_symptom, android.R.layout.simple_spinner_item);
         durationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         durationSpinner.setAdapter(durationAdapter);
@@ -178,6 +233,12 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(isEditing == false)
+            addSpecificSymptomFragment(position);
+        isEditing = false;
+    }
+
+    public Fragment addSpecificSymptomFragment(int position){
         Fragment fragment = null;
         switch(position)
         {
@@ -194,11 +255,13 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
             default:
                 break;
         }
-        if(fragment != null)
+        if(fragment != null) {
             getChildFragmentManager()
                     .beginTransaction()
                     .replace(R.id.symptomOptionsLayout, fragment, fragment.getTag())
                     .commit();
+        }
+        return fragment;
     }
 
     @Override

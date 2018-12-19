@@ -62,6 +62,7 @@ public final class AbnormalTempSymptom extends AbstractSymptom {
         dataMap.put("symptomName", symptomName);
         dataMap.put("dateOfOccurrence", dateOfOccurrence);
         dataMap.put("duration", duration);
+        dataMap.put("timeUnit", timeUnit);
         dataMap.put("description", description);
         dataMap.put("tempInCelsius", tempInCelsius);
 

@@ -188,7 +188,7 @@ public class HomeActivity extends AppCompatActivity
         {
             fragment = new NewLogFragment();
             fragmentTransaction.replace(R.id.frame_layout_content_main,fragment);
-            fragmentTransaction.addToBackStack(null); //stops fragment instead of destroying it
+            fragmentTransaction.addToBackStack("newLogFragment"); //stops fragment instead of destroying it
         }
 
         if(fragment != null) {

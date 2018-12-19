@@ -15,14 +15,15 @@ import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.fragment.symptom.OnItemSelectedListeners.PainIntensityOnItemSelectedListener;
 import symbiosproduction.com.morbuslogs.fragment.symptom.OnItemSelectedListeners.PainTypeOnItemSelectedListener;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PainSymptomFragment extends Fragment {
 
 
     private Spinner intensitySpinner;
     private Spinner painTypeSpinner;
+    private ArrayAdapter<CharSequence> intensityAdapter;
+    private ArrayAdapter<CharSequence> painTypeAdapter;
+    private String initPainTypePos;
+    private String initIntensityPos;
 
     private static final String TAG = "PainSymptomFragment";
 
@@ -46,18 +47,23 @@ public class PainSymptomFragment extends Fragment {
 
     public void initSpinners(View view){
         intensitySpinner = (Spinner) view.findViewById(R.id.intensitySpinner);
-        ArrayAdapter<CharSequence> intensityAdapter = ArrayAdapter.createFromResource(getActivity(),
+        intensityAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.pain_intensity_array, android.R.layout.simple_spinner_item);
         intensityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         intensitySpinner.setAdapter(intensityAdapter);
         intensitySpinner.setOnItemSelectedListener( new PainIntensityOnItemSelectedListener());
 
         painTypeSpinner = (Spinner) view.findViewById(R.id.painTypeSpinner);
-        ArrayAdapter<CharSequence> painTypeAdapter = ArrayAdapter.createFromResource(getActivity(),
+        painTypeAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.pain_type_array, android.R.layout.simple_spinner_item);
         painTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         painTypeSpinner.setAdapter(painTypeAdapter);
         painTypeSpinner.setOnItemSelectedListener( new PainTypeOnItemSelectedListener());
+
+        if(initPainTypePos != null && initIntensityPos != null) {
+            intensitySpinner.setSelection(intensityAdapter.getPosition(initIntensityPos));
+            painTypeSpinner.setSelection(painTypeAdapter.getPosition(initPainTypePos));
+        }
 
     }
 
@@ -69,6 +75,17 @@ public class PainSymptomFragment extends Fragment {
     public String getSelectedPainType()
     {
         return painTypeSpinner.getSelectedItem().toString();
+    }
+
+
+    public void setSelectedIntensity(String intensity)
+    {
+        initIntensityPos = intensity;
+    }
+
+    public void setSelectedPainType(String painType)
+    {
+        initPainTypePos = painType;
     }
 
 }

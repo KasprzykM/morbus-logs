@@ -48,7 +48,7 @@
     <!-- New Symptom Fragment -->
     <string-array name="symptom_array">
         <item>Pain</item>
-        <item>Temperature (Fever etc.)</item>
+        <item>Temperature</item>
     </string-array>
     <string name="symptom_name">Choose symptom:</string>
     <string name="date_chooser_symptom">Date of Occurrence:</string>
@@ -65,17 +65,24 @@
     </string-array>
     <string name="description_symptom">Description</string>
     <string name="unfilled_fields_toast">Please fill all empty fields!</string>
+    <string name="incorrect_temp_toast">Incorrect temperature value! (Or dead in 3.. 2.. 1..)</string>
 
     <!-- New Log Fragment -->
     <string name="add_new_symptom">Add new symptom</string>
     <string name="log_item_symp_name_tv">Name:</string>
     <string name="log_item_date_tv">Date:</string>
+    <string name="no_symptoms_available">No symptoms added, \n click the button to add one.</string>
+    <string name="confirm_log_item_delete_dialog">Are you sure you want to delete it?</string>
+    <string name="title_log_item_delete_dialog">Confirm delete</string>
+    <string name="confirm_delete_log_item_dialog">Delete</string>
+    <string name="cancel_delete_log_item_dialog">Cancel</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_fill_symptom_placeholder">!PLACEHOLDER! Tutaj bedzie mozliwosc dodania symptomu !PLACEHOLDER! </string>
+    <!-- New Symptom Fragment -->
+    <string name="add_symptom_button">Add symptom</string>
+    <string name="confirm_changes_symptom_button">Confirm changes</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- Abnormal Temp Fragment -->
+    <string name="temperature_input_fragment">Temperature (°C):</string>
 
     <!-- Pain Symptom Fragment -->
     <string name="pain_intensity">Intensity:</string>
@@ -88,11 +95,11 @@
     </string-array>
     <string name="pain_type">Pain type:</string>
     <string-array name="pain_type_array">
+        <item>Soft Tissue</item>
         <item>Acute</item>
         <item>Chronic</item>
         <item>Breakthrough</item>
         <item>Bone</item>
-        <item>Soft Tissue</item>
         <item>Nerve</item>
         <item>Referred</item>
         <item>Phantom</item>

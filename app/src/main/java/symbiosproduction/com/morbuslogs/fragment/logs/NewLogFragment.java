@@ -1,25 +1,38 @@
 package symbiosproduction.com.morbuslogs.fragment.logs;
 
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
 import symbiosproduction.com.morbuslogs.R;
+import symbiosproduction.com.morbuslogs.database.FirestoreWrapper;
+import symbiosproduction.com.morbuslogs.database.model.log.SymptomsLog;
 import symbiosproduction.com.morbuslogs.database.model.symptoms.AbstractSymptom;
+import symbiosproduction.com.morbuslogs.database.model.symptoms.pain.PainSymptom;
+import symbiosproduction.com.morbuslogs.database.model.symptoms.pain.PainType;
+import symbiosproduction.com.morbuslogs.database.model.symptoms.temperature.AbnormalTempSymptom;
 import symbiosproduction.com.morbuslogs.fragment.logs.adapter.LogAdapter;
 import symbiosproduction.com.morbuslogs.fragment.logs.interfaces.EditCallbacksAdapter;
 import symbiosproduction.com.morbuslogs.fragment.symptom.NewSymptomFragment;
@@ -36,11 +49,13 @@ public class NewLogFragment extends Fragment implements EditCallbacksAdapter {
     private static final String SYMPTOM_BUNDLE_CONSTANT = "symptom";
 
     private Button newSymptomButton;
+    private Button mLogToDbButton;
     private ArrayList<AbstractSymptom> arrayOfSymptoms;
     private RecyclerView logRecView;
     private LogAdapter logAdapter;
     private TextView emptyView;
     private int indexOfSymptomToEdit;
+    private ProgressBar mSpinnerProgress;
 
     public NewLogFragment() {
         // Required empty public constructor
@@ -90,8 +105,12 @@ public class NewLogFragment extends Fragment implements EditCallbacksAdapter {
 
         initArrayOfSymptoms(savedInstanceState);
         initRecyclerView(view);
+        initProgressBar(view);
 
 
+        initDebugData();
+
+        // Add new symptom
         newSymptomButton = (Button) view.findViewById(R.id.btn_new_symptom);
         newSymptomButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +126,66 @@ public class NewLogFragment extends Fragment implements EditCallbacksAdapter {
                         .commit();
             }
         });
+
+
+        // Add log to db
+        mLogToDbButton = (Button) view.findViewById(R.id.save_to_db_btn);
+        mLogToDbButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
+                alertDialogBuilder.setMessage(R.string.message_add_log_dialog);
+                alertDialogBuilder.setCancelable(true);
+                alertDialogBuilder.setTitle(R.string.title_add_log_dialog);
+                alertDialogBuilder.setIcon(R.drawable.ic_warning_white_24dp);
+
+                alertDialogBuilder.setPositiveButton(R.string.confirm_opt_add_log_dialog,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                mSpinnerProgress.setVisibility(View.VISIBLE);
+                                symptomsToDb();
+                            }
+                        });
+
+                alertDialogBuilder.setNegativeButton(R.string.cancel_opt_add_log_dialog,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
+            }
+        });
+
+    }
+
+    private void symptomsToDb()
+    {
+        FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
+        SymptomsLog symptomsLog = new SymptomsLog();
+        symptomsLog.addSymptomList(arrayOfSymptoms);
+
+        OnSuccessListener<Void> onSuccessListenerDB = new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Success adding symptom log to database");
+                Toast.makeText(getContext(), R.string.success_adding_toast, Toast.LENGTH_SHORT).show();
+                getActivity().getSupportFragmentManager().popBackStack();
+                mSpinnerProgress.setVisibility(View.GONE);
+            }
+        };
+
+        OnFailureListener onFailureListenerDB = new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "Failure adding symptom log to database");
+                mSpinnerProgress.setVisibility(View.GONE);
+            }
+        };
+        firestoreWrapper.sendLogToDatabase(symptomsLog, onSuccessListenerDB, onFailureListenerDB);
+
     }
 
     @Override
@@ -124,6 +203,36 @@ public class NewLogFragment extends Fragment implements EditCallbacksAdapter {
                 .add(R.id.const_layout_newlog_fragment, editSymptomFragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+
+    private void initDebugData()
+    {
+        AbnormalTempSymptom tempSymptom1 = new AbnormalTempSymptom("04/04/1996", 15L, "Minutes",
+                "Pointless Description", 44, "Temperature");
+
+        AbnormalTempSymptom tempSymptom2 = new AbnormalTempSymptom("26/04/1996", 45L, "Seconds",
+                "Rafal Urodziny", 35, "Temperature");
+
+        PainSymptom painSymptom1 = new PainSymptom("Mild", PainType.BREAKTHROUGH, "Pain description",
+                3L, "Hours", "20/12/2018", "Pain");
+
+        PainSymptom painSymptom2 = new PainSymptom("Maximum", PainType.BONE, "Long fulfilling poem",
+                90L, "Seconds", "01/01/2018", "Pain");
+
+        arrayOfSymptoms.add(tempSymptom1);
+        arrayOfSymptoms.add(painSymptom1);
+        arrayOfSymptoms.add(tempSymptom2);
+        arrayOfSymptoms.add(painSymptom2);
+        logAdapter.notifyDataSetChanged();
+        checkForEmptyList();
+
+    }
+
+    private void initProgressBar(View view)
+    {
+        mSpinnerProgress = (ProgressBar) view.findViewById(R.id.progressBarNewLog);
+        mSpinnerProgress.setVisibility(View.GONE);
     }
 
     private void initArrayOfSymptoms(Bundle savedInstanceState)

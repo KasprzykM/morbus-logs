@@ -81,7 +81,7 @@ public class HomeActivity extends AppCompatActivity
                 //@TODO: Add dialog to fill in sex and age of patient.
                 FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
                 Patient newPatient = new Patient(user);
-                firestoreWrapper.addData(newPatient);
+                firestoreWrapper.addPatientData(newPatient);
                 firestoreWrapper.sendPatientToDatabase(newPatient);
             }
             else

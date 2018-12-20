@@ -6,9 +6,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/default_background"
     android:id="@+id/const_layout_newlog_fragment"
-    tools:context=".fragment.logs.NewLogFragment">
+    tools:context=".fragments.logs.NewLogFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <Button
         android:id="@+id/btn_new_symptom"

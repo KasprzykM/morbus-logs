@@ -5,9 +5,8 @@
     android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.symptom.AbnormalTempSymptomFragment">
+    tools:context=".fragments.symptoms.AbnormalTempSymptomFragment">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <TextView
         android:id="@+id/textView4"

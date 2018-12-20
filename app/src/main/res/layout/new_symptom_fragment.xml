@@ -6,14 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/default_background"
-    tools:context=".fragment.symptom.NewSymptomFragment"
+    tools:context=".fragments.symptoms.NewSymptomFragment"
     android:clickable="true"
     android:focusableInTouchMode="true"
     android:focusable="true"
     tools:layout_editor_absoluteY="25dp">
 
 
-    <!-- TODO: Define landscape layout for this layout -->
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/symptomChooserLayout"

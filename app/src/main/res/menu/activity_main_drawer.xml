@@ -9,6 +9,12 @@
             android:icon="@drawable/ic_add_white_24dp"
             android:title="@string/nav_add_new_log"
             />
+
+        <item
+            android:title="@string/nav_logs"
+            android:id="@+id/nav_log_history"
+            android:icon="@drawable/ic_writing"
+            />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_info"
@@ -21,17 +27,17 @@
             />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
+    <!--<item android:title="Communicate">-->
+        <!--<menu>-->
+            <!--<item-->
+                <!--android:id="@+id/nav_share"-->
+                <!--android:icon="@drawable/ic_menu_share"-->
+                <!--android:title="Share" />-->
+            <!--<item-->
+                <!--android:id="@+id/nav_send"-->
+                <!--android:icon="@drawable/ic_menu_send"-->
+                <!--android:title="Send" />-->
+        <!--</menu>-->
+    <!--</item>-->
 
 </menu>

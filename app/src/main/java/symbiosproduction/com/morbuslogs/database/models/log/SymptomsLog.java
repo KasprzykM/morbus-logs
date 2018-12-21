@@ -13,16 +13,25 @@ import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom
 public class SymptomsLog implements DBCollection,ToMap {
 
     private String dateOfSubmission;
+    private String title;
     private Map<String, Map<String,Object>> mapOfSymptoms;
     private Integer sizeOfMap = 1;
 
-    private static final String DB_SUB_COLLECTION = "userLogs";
+    public static final String DB_SUB_COLLECTION = "userLogs";
 
 
-    public SymptomsLog() {
-        SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+    public SymptomsLog(String title) {
+        SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("HH:mm:s - dd-MM-yyyy");
         this.dateOfSubmission = ISO_8601_FORMAT.format(Calendar.getInstance().getTime());
+        this.title = title;
         mapOfSymptoms = new HashMap<>();
+    }
+
+    public SymptomsLog(Map<String, Object> initData)
+    {
+        this.title = (String) initData.get("title");
+        this.dateOfSubmission = (String) initData.get("dateOfSubmission");
+        this.mapOfSymptoms = (Map<String, Map<String, Object>>) initData.get("mapOfSymptoms");
     }
 
     public String getDateOfSubmission() {
@@ -47,6 +56,7 @@ public class SymptomsLog implements DBCollection,ToMap {
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("title", title);
         dataMap.put("dateOfSubmission",dateOfSubmission);
         dataMap.put("mapOfSymptoms",mapOfSymptoms);
 

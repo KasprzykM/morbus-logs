@@ -79,10 +79,16 @@
     <string name="cancel_delete_log_item_dialog">Cancel</string>
     <string name="save_to_db_button">Save entry log</string>
     <string name="message_add_log_dialog">Are you sure you want to save this entry?</string>
-    <string name="title_add_log_dialog">Confirm saving changes</string>
+    <string name="blank_title_message_log_dialog"> Your title is empty.</string>
+    <string name="title_add_log_dialog">Confirm saving changes.</string>
     <string name="cancel_opt_add_log_dialog">Cancel</string>
     <string name="confirm_opt_add_log_dialog">Save changes</string>
     <string name="success_adding_toast">Success saving!</string>
+    <string name="log_title">Title:</string>
+
+
+    <!-- Historical Symptoms Fragment -->
+    <string name="rec_view_date_hist_symp">Date:</string>
 
     <!-- New Symptom Fragment -->
     <string name="add_symptom_button">Add symptom</string>

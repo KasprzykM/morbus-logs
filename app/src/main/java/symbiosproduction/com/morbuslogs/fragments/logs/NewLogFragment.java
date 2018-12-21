@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +55,7 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
     private RecyclerView logRecView;
     private LogAdapter logAdapter;
     private TextView emptyView;
+    private EditText mEditTitle;
     private int indexOfSymptomToEdit;
     private ProgressBar mSpinnerProgress;
 
@@ -134,9 +136,16 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext(), android.R.style.Theme_Material_Dialog_Alert);
-                alertDialogBuilder.setMessage(R.string.message_add_log_dialog);
                 alertDialogBuilder.setCancelable(true);
+
+                String message = getResources().getString(R.string.message_add_log_dialog);
+                if(mEditTitle.length() == 0)
+                    message += getResources().getString(R.string.blank_title_message_log_dialog);
+
+
+                alertDialogBuilder.setMessage(message);
                 alertDialogBuilder.setTitle(R.string.title_add_log_dialog);
+
                 alertDialogBuilder.setIcon(R.drawable.ic_warning_white_24dp);
 
                 alertDialogBuilder.setPositiveButton(R.string.confirm_opt_add_log_dialog,
@@ -164,7 +173,7 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
     private void symptomsToDb()
     {
         FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
-        SymptomsLog symptomsLog = new SymptomsLog();
+        SymptomsLog symptomsLog = new SymptomsLog(mEditTitle.toString());
         symptomsLog.addSymptomList(arrayOfSymptoms);
 
         OnSuccessListener<Void> onSuccessListenerDB = new OnSuccessListener<Void>() {
@@ -254,6 +263,7 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
         // find id
         logRecView = (RecyclerView) view.findViewById(R.id.log_recycler_view);
         emptyView = (TextView) view.findViewById(R.id.empty_log_view);
+        mEditTitle = (EditText) view.findViewById(R.id.log_title_fragment);
         checkForEmptyList();
 
         // create adapter

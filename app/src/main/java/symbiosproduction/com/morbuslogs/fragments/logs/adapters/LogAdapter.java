@@ -17,7 +17,7 @@ import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
 import symbiosproduction.com.morbuslogs.fragments.logs.commInterfaces.EditLogCallbacksAdapter;
 
-public class LogAdapter extends RecyclerView.Adapter<LogAdapter.SymptomViewHolder> implements View.OnClickListener {
+public class LogAdapter extends RecyclerView.Adapter<LogAdapter.SymptomViewHolder> {
 
     private ArrayList<AbstractSymptom> dataSet;
     private Context mContext;
@@ -26,11 +26,6 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.SymptomViewHolde
 
     private int lastPosition = -1;
 
-
-    @Override
-    public void onClick(View v) {
-
-    }
 
     public LogAdapter(ArrayList<AbstractSymptom> data, Context context, EditLogCallbacksAdapter editLogCallbacksAdapter) {
         this.mContext = context;

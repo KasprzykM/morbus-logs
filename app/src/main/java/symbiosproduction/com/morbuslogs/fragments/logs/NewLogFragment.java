@@ -31,9 +31,6 @@ import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.FirestoreWrapper;
 import symbiosproduction.com.morbuslogs.database.models.log.SymptomsLog;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
-import symbiosproduction.com.morbuslogs.database.models.symptoms.pain.PainSymptom;
-import symbiosproduction.com.morbuslogs.database.models.symptoms.pain.PainType;
-import symbiosproduction.com.morbuslogs.database.models.symptoms.temperature.AbnormalTempSymptom;
 import symbiosproduction.com.morbuslogs.fragments.logs.adapters.LogAdapter;
 import symbiosproduction.com.morbuslogs.fragments.logs.commInterfaces.EditLogCallbacksAdapter;
 import symbiosproduction.com.morbuslogs.fragments.symptoms.NewSymptomFragment;
@@ -58,6 +55,8 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
     private EditText mEditTitle;
     private int indexOfSymptomToEdit;
     private ProgressBar mSpinnerProgress;
+    private String dateOfSubmissionToEdit;
+    private Boolean mEditMode = false;
 
     public NewLogFragment() {
         // Required empty public constructor
@@ -152,7 +151,14 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 mSpinnerProgress.setVisibility(View.VISIBLE);
-                                symptomsToDb();
+                                // Update Log instead of adding
+                                if(mEditMode)
+                                {
+                                        //@TODO: Finish edit mode in here
+                                }
+                                // Add symptom
+                                else
+                                    symptomsToDb();
                             }
                         });
 
@@ -173,7 +179,7 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
     private void symptomsToDb()
     {
         FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
-        SymptomsLog symptomsLog = new SymptomsLog(mEditTitle.toString());
+        SymptomsLog symptomsLog = new SymptomsLog(mEditTitle.getText().toString());
         symptomsLog.addSymptomList(arrayOfSymptoms);
 
         OnSuccessListener<Void> onSuccessListenerDB = new OnSuccessListener<Void>() {
@@ -217,24 +223,24 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
 
     private void initDebugData()
     {
-        AbnormalTempSymptom tempSymptom1 = new AbnormalTempSymptom("04/04/1996", 15L, "Minutes",
-                "Pointless Description", 44, "Temperature");
-
-        AbnormalTempSymptom tempSymptom2 = new AbnormalTempSymptom("26/04/1996", 45L, "Seconds",
-                "Rafal Urodziny", 35, "Temperature");
-
-        PainSymptom painSymptom1 = new PainSymptom("Mild", PainType.BREAKTHROUGH, "Pain description",
-                3L, "Hours", "20/12/2018", "Pain");
-
-        PainSymptom painSymptom2 = new PainSymptom("Maximum", PainType.BONE, "Long fulfilling poem",
-                90L, "Seconds", "01/01/2018", "Pain");
-
-        arrayOfSymptoms.add(tempSymptom1);
-        arrayOfSymptoms.add(painSymptom1);
-        arrayOfSymptoms.add(tempSymptom2);
-        arrayOfSymptoms.add(painSymptom2);
-        logAdapter.notifyDataSetChanged();
-        checkForEmptyList();
+//        AbnormalTempSymptom tempSymptom1 = new AbnormalTempSymptom("04/04/1996", 15L, "Minutes",
+//                "Pointless Description", 44, "Temperature");
+//
+//        AbnormalTempSymptom tempSymptom2 = new AbnormalTempSymptom("26/04/1996", 45L, "Seconds",
+//                "Rafal Urodziny", 35, "Temperature");
+//
+//        PainSymptom painSymptom1 = new PainSymptom("Mild", PainType.BREAKTHROUGH, "Pain description",
+//                3L, "Hours", "20/12/2018", "Pain");
+//
+//        PainSymptom painSymptom2 = new PainSymptom("Maximum", PainType.BONE, "Long fulfilling poem",
+//                90L, "Seconds", "01/01/2018", "Pain");
+//
+//        arrayOfSymptoms.add(tempSymptom1);
+//        arrayOfSymptoms.add(painSymptom1);
+//        arrayOfSymptoms.add(tempSymptom2);
+//        arrayOfSymptoms.add(painSymptom2);
+//        logAdapter.notifyDataSetChanged();
+//        checkForEmptyList();
 
     }
 
@@ -246,12 +252,20 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
 
     private void initArrayOfSymptoms(Bundle savedInstanceState)
     {
+        // list to edit
+        Bundle editArguments = getArguments();
+        if(editArguments != null) {
+            arrayOfSymptoms = editArguments.getParcelableArrayList("arrayOfSymptoms");
+            mEditTitle.setText(editArguments.getString("title"));
+            dateOfSubmissionToEdit = editArguments.getString("date");
+            mEditMode = true;
+        }
         // empty list
-        if(savedInstanceState == null || !savedInstanceState.containsKey("arrayOfSymptoms"))
+        else if(savedInstanceState == null || !savedInstanceState.containsKey("arrayOfSymptoms"))
         {
             arrayOfSymptoms = new ArrayList<>();
         }
-        // restoring list
+        // restoring list from rotation
         else
         {
             arrayOfSymptoms = savedInstanceState.getParcelableArrayList("arrayOfSymptoms");

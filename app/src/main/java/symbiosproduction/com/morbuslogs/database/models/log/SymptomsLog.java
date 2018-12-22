@@ -1,6 +1,7 @@
 package symbiosproduction.com.morbuslogs.database.models.log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Map;
 import symbiosproduction.com.morbuslogs.database.DBCollection;
 import symbiosproduction.com.morbuslogs.database.ToMap;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
+import symbiosproduction.com.morbuslogs.database.models.symptoms.pain.PainSymptom;
+import symbiosproduction.com.morbuslogs.database.models.symptoms.temperature.AbnormalTempSymptom;
 
 public class SymptomsLog implements DBCollection,ToMap {
 
@@ -21,7 +24,7 @@ public class SymptomsLog implements DBCollection,ToMap {
 
 
     public SymptomsLog(String title) {
-        SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("HH:mm:s - dd-MM-yyyy");
+        SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("HH:mm:s dd-MM-yyyy");
         this.dateOfSubmission = ISO_8601_FORMAT.format(Calendar.getInstance().getTime());
         this.title = title;
         mapOfSymptoms = new HashMap<>();
@@ -71,5 +74,40 @@ public class SymptomsLog implements DBCollection,ToMap {
     public String getSubCollection()
     {
         return DB_SUB_COLLECTION;
+    }
+
+    public String getTitle()
+    {
+        return title;
+    }
+
+
+    public ArrayList<AbstractSymptom> getArrayOfSymptoms()
+    {
+        ArrayList<AbstractSymptom> abstractSymptoms = new ArrayList<>();
+        for(Map.Entry<String, Map<String, Object>> entry: mapOfSymptoms.entrySet())
+        {
+            Map<String, Object> symptomInMap = entry.getValue();
+            AbstractSymptom abstractSymptom = null;
+            String symptomName = (String) symptomInMap.get("symptomName");
+            switch(symptomName)
+            {
+                case "Pain":
+                    abstractSymptom = new PainSymptom(symptomInMap);
+                    break;
+                case "Temperature":
+                    abstractSymptom = new AbnormalTempSymptom(symptomInMap);
+                    break;
+                default:
+                    break;
+            }
+            if(abstractSymptom != null)
+            {
+                abstractSymptoms.add(abstractSymptom);
+            }
+        }
+
+
+        return abstractSymptoms;
     }
 }

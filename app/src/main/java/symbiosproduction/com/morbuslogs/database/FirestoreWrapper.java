@@ -9,7 +9,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
 
 import symbiosproduction.com.morbuslogs.database.models.log.SymptomsLog;
 import symbiosproduction.com.morbuslogs.database.models.patient.Patient;
@@ -48,13 +47,26 @@ public class FirestoreWrapper{
     }
 
 
-    public void fetchSymptomsLog(String mainCollection, String subCollection, OnCompleteListener onCompleteListener) {
+    public void getSymptomsLog(String mainCollection, String subCollection, OnCompleteListener onCompleteListener) {
         FirebaseUser loggedUser = FirebaseAuth.getInstance().getCurrentUser();
         if (loggedUser != null) {
             DATABASE.collection(mainCollection)
                     .document(loggedUser.getUid())
                     .collection(subCollection).get().addOnCompleteListener(onCompleteListener);
 
+        }
+    }
+
+    public void deleteSymptomsLog(SymptomsLog symptomsLog, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener)
+    {
+        FirebaseUser loggedUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(loggedUser != null)
+        {
+            DATABASE.collection(symptomsLog.DB_MAIN_COLLECTION)
+                    .document(loggedUser.getUid())
+                    .collection(SymptomsLog.DB_SUB_COLLECTION)
+                    .document(symptomsLog.getDateOfSubmission())
+                    .delete().addOnSuccessListener(onSuccessListener).addOnFailureListener(onFailureListener);
         }
     }
 }

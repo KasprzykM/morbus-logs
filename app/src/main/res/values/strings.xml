@@ -89,6 +89,11 @@
 
     <!-- Historical Symptoms Fragment -->
     <string name="rec_view_date_hist_symp">Date:</string>
+    <string name="rec_view_title_hist_symp">Title:</string>
+    <string name="rec_view_number_of_logs_hist_symp">Number of logs:</string>
+    <string name="rec_view_hour_hist_symp">Hour:</string>
+    <string name="success_del_toast_adapter">Success!</string>
+    <string name="failure_del_toast_adapter">Oops.. Something went wrong deleting!</string>
 
     <!-- New Symptom Fragment -->
     <string name="add_symptom_button">Add symptom</string>

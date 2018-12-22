@@ -3,6 +3,7 @@ package symbiosproduction.com.morbuslogs.database.models.symptoms.temperature;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +27,13 @@ public final class AbnormalTempSymptom extends AbstractSymptom {
         this.tempInCelsius = tempInCelsius;
     }
 
+    public AbnormalTempSymptom(Map<String, Object> symptomInMap)
+    {
+        super(symptomInMap);
+        Long tempLong = (Long) symptomInMap.get("tempInCelsius");
+        this.tempInCelsius = new BigDecimal(tempLong).intValueExact();
+    }
+
     public static final Parcelable.Creator<AbnormalTempSymptom> CREATOR
             = new Parcelable.Creator<AbnormalTempSymptom>() {
         public AbnormalTempSymptom createFromParcel(Parcel in) {
@@ -40,7 +48,7 @@ public final class AbnormalTempSymptom extends AbstractSymptom {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeInt(tempInCelsius);
+        dest.writeLong(tempInCelsius);
     }
 
     private AbnormalTempSymptom(Parcel in)

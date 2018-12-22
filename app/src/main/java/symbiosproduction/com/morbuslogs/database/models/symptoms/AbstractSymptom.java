@@ -4,6 +4,8 @@ package symbiosproduction.com.morbuslogs.database.models.symptoms;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Map;
+
 import symbiosproduction.com.morbuslogs.database.ToMap;
 
 public abstract class AbstractSymptom implements ToMap,Parcelable {
@@ -95,6 +97,16 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
         this.description = description;
         this.symptomName = symptomName;
         this.timeUnit = timeUnit;
+    }
+
+    public AbstractSymptom(Map<String, Object> symptomInMap)
+    {
+       this.dateOfOccurrence = (String) symptomInMap.get("dateOfOccurrence");
+       this.duration = (Long) symptomInMap.get("duration");
+       this.description = (String) symptomInMap.get("description");
+       this.symptomName = (String) symptomInMap.get("symptomName");
+       this.timeUnit = (String) symptomInMap.get("timeUnit");
+
     }
 
     protected AbstractSymptom(Parcel in)

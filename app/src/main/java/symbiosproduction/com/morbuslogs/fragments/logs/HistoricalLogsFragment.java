@@ -12,7 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.Button;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,10 +24,12 @@ import java.util.ArrayList;
 import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.FirestoreWrapper;
 import symbiosproduction.com.morbuslogs.database.models.log.SymptomsLog;
+import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
 import symbiosproduction.com.morbuslogs.fragments.logs.adapters.SympLogAdapter;
+import symbiosproduction.com.morbuslogs.fragments.logs.commInterfaces.EditHistLogCallbacksAdapter;
 
 
-public class HistoricalLogsFragment extends Fragment {
+public class HistoricalLogsFragment extends Fragment implements EditHistLogCallbacksAdapter {
 
 
     private static final String TAG = "HistoricalLogsFragment";
@@ -35,6 +37,8 @@ public class HistoricalLogsFragment extends Fragment {
     private ArrayList<SymptomsLog> sympLogArrayList;
     private RecyclerView sympLogRecView;
     private SympLogAdapter sympLogAdapter;
+
+    private static int EDIT_LOG_REQUEST_CODE_CONSTANT = 42342;
 
 
 
@@ -86,7 +90,7 @@ public class HistoricalLogsFragment extends Fragment {
             }
         };
         FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
-        firestoreWrapper.fetchSymptomsLog(SymptomsLog.DB_MAIN_COLLECTION, SymptomsLog.DB_SUB_COLLECTION, onCompleteListener);
+        firestoreWrapper.getSymptomsLog(SymptomsLog.DB_MAIN_COLLECTION, SymptomsLog.DB_SUB_COLLECTION, onCompleteListener);
     }
 
     private void initRecyclerView(View view) {
@@ -94,7 +98,7 @@ public class HistoricalLogsFragment extends Fragment {
         sympLogRecView = (RecyclerView) view.findViewById(R.id.symptom_log_recview);
 
         // create adapter
-        sympLogAdapter = new SympLogAdapter(sympLogArrayList, getContext());
+        sympLogAdapter = new SympLogAdapter(sympLogArrayList, getContext(), this);
         sympLogRecView.setAdapter(sympLogAdapter);
 
         // create layout manager
@@ -104,5 +108,22 @@ public class HistoricalLogsFragment extends Fragment {
         // set additional animations
         sympLogRecView.setItemAnimator(new DefaultItemAnimator());
         sympLogRecView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
+    }
+
+    @Override
+    public void onSympArrayEdit(SymptomsLog symptomsLog) {
+        ArrayList<AbstractSymptom> arrayOfSymptoms = symptomsLog.getArrayOfSymptoms();
+        Bundle bundleToSave = new Bundle();
+
+        bundleToSave.putParcelableArrayList("arrayOfSymptoms", arrayOfSymptoms);
+        bundleToSave.putString("title", symptomsLog.getTitle());
+        bundleToSave.putString("date", symptomsLog.getDateOfSubmission());
+        NewLogFragment newLogFragment = new NewLogFragment();
+        newLogFragment.setArguments(bundleToSave);
+        newLogFragment.setTargetFragment(this, EDIT_LOG_REQUEST_CODE_CONSTANT);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction().add(R.id.relat_layout_historical_fragment, newLogFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

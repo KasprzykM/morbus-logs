@@ -1,6 +1,7 @@
 package symbiosproduction.com.morbuslogs.database.models.symptoms;
 
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -15,7 +16,17 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
         protected String timeUnit;
         protected String description;
         protected String symptomName;
+        protected String photoPath;
+        protected String photoDbPath;
 
+
+    public String getPhotoDbPath() {
+        return photoDbPath;
+    }
+
+    public void setPhotoDbPath(String photoDbPath) {
+        this.photoDbPath = photoDbPath;
+    }
 
     public String getTimeUnit() {
         return timeUnit;
@@ -77,6 +88,15 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
         return duration;
     }
 
+
+    public String getPhotoPath() {
+        return photoPath;
+    }
+
+    public void setPhotoPath(String photoPath) {
+        this.photoPath = photoPath;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -89,14 +109,18 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
         dest.writeString(description);
         dest.writeString(symptomName);
         dest.writeString(timeUnit);
+        dest.writeString(photoPath);
+        dest.writeString(photoDbPath);
     }
 
-    public  AbstractSymptom(String dateOfOccurrence, String timeUnit, Long duration, String description, String symptomName){
+    public AbstractSymptom(String dateOfOccurrence, String timeUnit, Long duration, String description, String symptomName, String photoPath, String photoDbPath){
         this.dateOfOccurrence = dateOfOccurrence;
         this.duration = duration;
         this.description = description;
         this.symptomName = symptomName;
         this.timeUnit = timeUnit;
+        this.photoPath = photoPath;
+        this.photoDbPath = photoDbPath;
     }
 
     public AbstractSymptom(Map<String, Object> symptomInMap)
@@ -106,6 +130,8 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
        this.description = (String) symptomInMap.get("description");
        this.symptomName = (String) symptomInMap.get("symptomName");
        this.timeUnit = (String) symptomInMap.get("timeUnit");
+       this.photoPath = (String) symptomInMap.get("photoPath");
+       this.photoDbPath = (String) symptomInMap.get("photoDbPath");
 
     }
 
@@ -116,5 +142,7 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
        description = in.readString();
        symptomName = in.readString();
        timeUnit = in.readString();
+       photoPath = in.readString();
+       photoDbPath = in.readString();
     }
 }

@@ -67,6 +67,14 @@
     <string name="description_symptom">Description</string>
     <string name="unfilled_fields_toast">Please fill all empty fields!</string>
     <string name="incorrect_temp_toast">Incorrect temperature value! (Or dead in 3.. 2.. 1..)</string>
+    <string name="add_symptom_button">Add symptom</string>
+    <string name="confirm_changes_symptom_button">Confirm changes</string>
+    <string name="choose_photo_btn">Choose photo</string>
+    <string name="see_chosen_btn">Preview photo</string>
+    <string name="filename_text_view">Filename</string>
+    <string name="file_chosen_successfuly_toast">File chosen successfully!</string>
+    <string name="no_photo_added">No photo was added to symptom yet!</string>
+
 
     <!-- New Log Fragment -->
     <string name="add_new_symptom">Add new symptom</string>
@@ -85,6 +93,7 @@
     <string name="confirm_opt_add_log_dialog">Save changes</string>
     <string name="success_adding_toast">Success saving!</string>
     <string name="log_title">Title:</string>
+    <string name="add_atleast_one_log_toast">Please add at least one log before saving!</string>
 
 
     <!-- Historical Symptoms Fragment -->
@@ -95,9 +104,6 @@
     <string name="success_del_toast_adapter">Success!</string>
     <string name="failure_del_toast_adapter">Oops.. Something went wrong deleting!</string>
 
-    <!-- New Symptom Fragment -->
-    <string name="add_symptom_button">Add symptom</string>
-    <string name="confirm_changes_symptom_button">Confirm changes</string>
 
     <!-- Abnormal Temp Fragment -->
     <string name="temperature_input_fragment">Temperature (°C):</string>
@@ -122,5 +128,8 @@
         <item>Referred</item>
         <item>Phantom</item>
     </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

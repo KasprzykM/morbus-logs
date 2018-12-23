@@ -34,7 +34,6 @@ public final class PainSymptom extends AbstractSymptom {
     };
 
 
-    //@TODO: Add picture of pain area?
 
     private PainSymptom(Parcel in) {
         super(in);
@@ -48,8 +47,10 @@ public final class PainSymptom extends AbstractSymptom {
                        Long duration,
                        String timeUnit,
                        String dateOfOccurrence,
-                       String symptomName) {
-        super(dateOfOccurrence, timeUnit, duration, description, symptomName);
+                       String symptomName,
+                       String photoPath,
+                       String photoDbPath) {
+        super(dateOfOccurrence, timeUnit, duration, description, symptomName, photoPath, photoDbPath);
         this.intensity = intensity;
         this.painType = painType;
     }
@@ -72,6 +73,8 @@ public final class PainSymptom extends AbstractSymptom {
         dataMap.put("description", description);
         dataMap.put("intensity", intensity);
         dataMap.put("painType", painType.toString());
+        dataMap.put("photoPath", photoPath);
+        dataMap.put("photoDbPath", photoDbPath);
 
 
         return dataMap;

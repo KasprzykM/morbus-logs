@@ -1,6 +1,12 @@
 package symbiosproduction.com.morbuslogs.database;
 
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -8,7 +14,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
 
 import symbiosproduction.com.morbuslogs.database.models.log.SymptomsLog;
 import symbiosproduction.com.morbuslogs.database.models.patient.Patient;
@@ -82,5 +95,65 @@ public class FirestoreWrapper{
                     .update(symptomsLog.toMap())
                     .addOnSuccessListener(onSuccessListener).addOnFailureListener(onFailureListener);
         }
+    }
+
+    public void deletePhotos(SymptomsLog symptomsLog)
+    {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        List<String> photoDBPath = symptomsLog.getPhotoReferences();
+        List<String> photoFilePath = symptomsLog.getPhotoFileReferences();
+        for(int i = 0; i < photoFilePath.size() ; i++)
+        {
+            StorageReference storageReference = storage.getReference();
+            StorageReference imageReference = storageReference.child(photoDBPath.get(i));
+            imageReference.delete();
+        }
+    }
+
+
+    public void uploadPhotos(SymptomsLog symptomsLog, OnSuccessListener<UploadTask.TaskSnapshot> onSuccessListener, OnFailureListener onFailureListener, Context context)
+    {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        Bitmap bitmapOfPhoto;
+        List<String> photoDBPath = symptomsLog.getPhotoReferences();
+        List<String> photoFilePath = symptomsLog.getPhotoFileReferences();
+
+
+        for(int i = 0; i < photoFilePath.size(); i++)
+        {
+
+            // Storage references
+            StorageReference storageReference = storage.getReference();
+            StorageReference imageReference = storageReference.child(photoDBPath.get(i));
+
+            // File references
+            Uri imageUri = Uri.parse(photoFilePath.get(i));
+            try {
+                // Fetch file from memory
+                bitmapOfPhoto = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
+
+                // Turn it into byte array
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmapOfPhoto.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] data = baos.toByteArray();
+
+                //Upload it
+                UploadTask uploadTask = imageReference.putBytes(data);
+                uploadTask.addOnSuccessListener(onSuccessListener)
+                        .addOnFailureListener(onFailureListener);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void fetchPhoto(String dbPath, OnSuccessListener<byte[]> onSuccessListener)
+    {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference pathReference = storageRef.child(dbPath);
+        final long ONE_MEGABYTE = 1024 * 1024;
+        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(onSuccessListener);
     }
 }

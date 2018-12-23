@@ -98,6 +98,7 @@ public class SympLogAdapter extends RecyclerView.Adapter<SympLogAdapter.SymptomL
 
                                 FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
                                 firestoreWrapper.deleteSymptomsLog(symptomsLog,onSuccessListener,onFailureListener);
+                                firestoreWrapper.deletePhotos(symptomsLog);
                             }
                         });
 

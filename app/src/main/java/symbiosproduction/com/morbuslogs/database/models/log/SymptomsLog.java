@@ -19,6 +19,8 @@ public class SymptomsLog implements DBCollection,ToMap {
     private String title;
     private Map<String, Map<String,Object>> mapOfSymptoms;
     private Integer sizeOfMap = 1;
+    private List<String> photoReferences;
+    private List<String> photoFileReferences;
 
     public static final String DB_SUB_COLLECTION = "userLogs";
 
@@ -28,6 +30,8 @@ public class SymptomsLog implements DBCollection,ToMap {
         this.dateOfSubmission = ISO_8601_FORMAT.format(Calendar.getInstance().getTime());
         this.title = title;
         mapOfSymptoms = new HashMap<>();
+        photoReferences = new ArrayList<>();
+        photoFileReferences = new ArrayList<>();
     }
 
     public SymptomsLog(Map<String, Object> initData)
@@ -35,6 +39,8 @@ public class SymptomsLog implements DBCollection,ToMap {
         this.title = (String) initData.get("title");
         this.dateOfSubmission = (String) initData.get("dateOfSubmission");
         this.mapOfSymptoms = (Map<String, Map<String, Object>>) initData.get("mapOfSymptoms");
+        this.photoReferences = (List<String>) initData.get("photoReferences");
+        this.photoFileReferences = (List<String>) initData.get("photoFileReferences");
     }
 
     public String getDateOfSubmission() {
@@ -57,6 +63,8 @@ public class SymptomsLog implements DBCollection,ToMap {
     {
         //TODO: Possibly change key so its easier to fetch
         mapOfSymptoms.put( sizeOfMap.toString() ,abstractSymptom.toMap());
+        photoReferences.add(abstractSymptom.getPhotoDbPath());
+        photoFileReferences.add(abstractSymptom.getPhotoPath());
         sizeOfMap++;
     }
 
@@ -66,6 +74,8 @@ public class SymptomsLog implements DBCollection,ToMap {
         dataMap.put("title", title);
         dataMap.put("dateOfSubmission",dateOfSubmission);
         dataMap.put("mapOfSymptoms",mapOfSymptoms);
+        dataMap.put("photoReferences", photoReferences);
+        dataMap.put("photoFileReferences", photoFileReferences);
 
         return dataMap;
     }
@@ -113,5 +123,13 @@ public class SymptomsLog implements DBCollection,ToMap {
 
 
         return abstractSymptoms;
+    }
+
+    public List<String> getPhotoReferences() {
+        return photoReferences;
+    }
+
+    public List<String> getPhotoFileReferences() {
+        return photoFileReferences;
     }
 }

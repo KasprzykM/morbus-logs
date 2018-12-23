@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 
@@ -171,6 +172,12 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
 
     private void symptomsToDb()
     {
+        if(arrayOfSymptoms.size() == 0)
+        {
+            Toast.makeText(getContext(), R.string.add_atleast_one_log_toast, Toast.LENGTH_LONG).show();
+            mSpinnerProgress.setVisibility(View.GONE);
+            return;
+        }
         FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
         SymptomsLog symptomsLog = new SymptomsLog(mEditTitle.getText().toString());
         symptomsLog.addSymptomList(arrayOfSymptoms);
@@ -180,10 +187,19 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "Success adding symptom log to database");
                 Toast.makeText(getContext(), R.string.success_adding_toast, Toast.LENGTH_SHORT).show();
-                // To refresh when we do the data swap again
                 if(mEditMode)
                     getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, null);
                 getActivity().getSupportFragmentManager().popBackStack();
+                // To refresh when we do the data swap again
+                /*if(mEditMode)
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, null);
+                getActivity().getSupportFragmentManager().popBackStack();*/
+            }
+        };
+
+        OnSuccessListener<UploadTask.TaskSnapshot> onSuccessListenerPhoto = new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 mSpinnerProgress.setVisibility(View.GONE);
             }
         };
@@ -191,7 +207,7 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
         OnFailureListener onFailureListenerDB = new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "Failure adding symptom log to database");
+                Log.e(TAG, "Failure adding symptom log to database or uploading photo");
                 mSpinnerProgress.setVisibility(View.GONE);
             }
         };
@@ -199,10 +215,12 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
         {
             symptomsLog.setDateOfSubmission(dateOfSubmissionToEdit);
             firestoreWrapper.updateLogDB(symptomsLog, onSuccessListenerDB, onFailureListenerDB);
+            firestoreWrapper.uploadPhotos(symptomsLog, onSuccessListenerPhoto, onFailureListenerDB, getContext());
         }
-        else
+        else {
             firestoreWrapper.addLogToDB(symptomsLog, onSuccessListenerDB, onFailureListenerDB);
-
+            firestoreWrapper.uploadPhotos(symptomsLog, onSuccessListenerPhoto, onFailureListenerDB, getContext());
+        }
     }
 
     @Override

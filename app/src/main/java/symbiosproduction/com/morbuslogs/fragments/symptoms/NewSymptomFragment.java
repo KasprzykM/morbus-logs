@@ -1,12 +1,19 @@
 package symbiosproduction.com.morbuslogs.fragments.symptoms;
 
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -21,11 +28,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.pain.PainSymptom;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.pain.PainType;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.temperature.AbnormalTempSymptom;
+import symbiosproduction.com.morbuslogs.fragments.commonFragments.PhotoPreviewFragment;
 import symbiosproduction.com.morbuslogs.fragments.commonFragments.SelectDateFragment;
 import symbiosproduction.com.morbuslogs.fragments.symptoms.OnItemSelectedListeners.DurationOnItemSelectedListener;
 
@@ -33,6 +44,10 @@ import static android.app.Activity.RESULT_OK;
 
 public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
+    private String filePath = "EMPTY_FILE_FLAG";
+    private String DB_PHOTO_PATH = "EMPTY_PHOTO";
+    private Button previewPhotoBtn;
+    private Button choosePhotoBtn;
     private Button submitButton;
     private Button datePickerButton;
     private Spinner durationSpinner;
@@ -43,14 +58,55 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
     private AbstractSymptom symptom;
     private ArrayAdapter<CharSequence> symptomAdapter;
     private ArrayAdapter<CharSequence> durationAdapter;
+    private Bitmap bitmapOfPhoto;
 
     private Boolean isEditing = false;
 
     private static final String SYMPTOM_BUNDLE_CONSTANT = "symptom";
     private static final String TAG = "NewSymptomFragment";
 
+    private static final int CHOOSE_PHOTO_CODE = 1234;
+
     public NewSymptomFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        InputStream stream = null;
+        if (requestCode == CHOOSE_PHOTO_CODE && resultCode == RESULT_OK)
+            try {
+                // recyle unused bitmaps
+                if (bitmapOfPhoto != null) {
+                    bitmapOfPhoto.recycle();
+                }
+                //stream = getActivity().getContentResolver().openInputStream(data.getData());
+                //bitmapOfPhoto = BitmapFactory.decodeStream(stream);
+                filePath = data.getDataString();
+                SimpleDateFormat ISO_8601_FORMAT = new SimpleDateFormat("HH:mm:s dd-MM-yyyy");
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                //TODO: Magic of DB_PHOTO_PATH
+                if(user != null)
+                    DB_PHOTO_PATH = user.getUid() + "/"+ ISO_8601_FORMAT.format(Calendar.getInstance().getTime());
+                Uri imageUri = Uri.parse(filePath);
+                bitmapOfPhoto = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                Toast.makeText(getContext(), R.string.file_chosen_successfuly_toast, Toast.LENGTH_LONG).show();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally{
+
+                if (stream != null)
+                    try {
+                        stream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+            }
     }
 
 
@@ -69,7 +125,45 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
         initEditText(view);
         submitButton(view);
         editCallback(view);
+        initPhotoButtons(view);
     }
+
+    private void initPhotoButtons(View view) {
+        previewPhotoBtn = (Button) view.findViewById(R.id.check_photo_btn);
+        choosePhotoBtn = (Button) view.findViewById(R.id.choose_photo_btn);
+
+        choosePhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                startActivityForResult(intent, CHOOSE_PHOTO_CODE);
+            }
+        });
+
+        previewPhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!filePath.equals("EMPTY_FILE_FLAG"))
+                {
+                    PhotoPreviewFragment fragment = new PhotoPreviewFragment();
+                    fragment.setFilePath(filePath, getContext(), DB_PHOTO_PATH);
+                    getActivity().getSupportFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.frameLayout, fragment)
+                            .addToBackStack(null)
+                            .commit();
+                }else
+                {
+                    Toast.makeText(getContext(), R.string.no_photo_added, Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+    }
+
 
     public void editCallback(View view){
         Bundle bundle = getArguments();
@@ -89,7 +183,9 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
             symptomSpinner.setSelection(symptomPosSpinner);
             durationSpinner.setSelection(durationPosSpinner);
             submitButton.setText(R.string.confirm_changes_symptom_button);
-
+            // TODO: fix file path in here..
+            filePath = symptomToEdit.getPhotoPath();
+            DB_PHOTO_PATH = symptomToEdit.getPhotoDbPath();
 
             // get sub fragment for specific symptom
             Fragment specificSymptomFragment = addSpecificSymptomFragment(symptomPosSpinner);
@@ -163,7 +259,9 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
                             ,description, duration
                             ,timeUnit
                             ,date,
-                            symptomName);
+                            symptomName,
+                            filePath,
+                            DB_PHOTO_PATH);
                 }
                 else if(specificSymptomFragment instanceof AbnormalTempSymptomFragment)
                 {
@@ -175,7 +273,14 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
                         Toast.makeText(getContext(), R.string.incorrect_temp_toast, Toast.LENGTH_LONG).show();
                         return;
                     }
-                    symptom = new AbnormalTempSymptom(date,duration,timeUnit,description,tempValue,symptomName);
+                    symptom = new AbnormalTempSymptom(date,
+                            duration,
+                            timeUnit,
+                            description,
+                            tempValue,
+                            symptomName,
+                            filePath,
+                            DB_PHOTO_PATH);
                 }
 
 

@@ -21,9 +21,11 @@ public final class AbnormalTempSymptom extends AbstractSymptom {
                                String timeUnit,
                                String description,
                                Integer tempInCelsius,
-                               String symptomName)
+                               String symptomName,
+                               String photoPath,
+                               String photoDbPath)
     {
-        super(dateOfOccurrence,timeUnit,duration,description, symptomName);
+        super(dateOfOccurrence,timeUnit,duration,description, symptomName, photoPath, photoDbPath);
         this.tempInCelsius = tempInCelsius;
     }
 
@@ -73,6 +75,8 @@ public final class AbnormalTempSymptom extends AbstractSymptom {
         dataMap.put("timeUnit", timeUnit);
         dataMap.put("description", description);
         dataMap.put("tempInCelsius", tempInCelsius);
+        dataMap.put("photoPath", photoPath);
+        dataMap.put("photoDbPath", photoDbPath);
 
         return dataMap;
     }

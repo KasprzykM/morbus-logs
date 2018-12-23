@@ -158,27 +158,6 @@ public class HomeActivity extends AppCompatActivity
 
                 firestoreWrapper.addPatientToDB(newPatient, onSuccessListener, onFailureListener);
             }
-            else
-            {
-//                db.collection("Logs")
-//                        .document(user.getUid())
-//                        .collection("userLogs").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if(task.isSuccessful())
-//                        {
-//                            for(QueryDocumentSnapshot document: task.getResult())
-//                            {
-//                                Log.d(TAG,document.getId() + " => " + document.getData());
-//                            }
-//                        }
-//                        else
-//                        {
-//                            Log.d(TAG,"Error getting documents: ", task.getException());
-//                        }
-//                    }
-//                });
-            }
 
         }
     }
@@ -228,7 +207,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.nav_log_history) {
             fragment = new HistoricalLogsFragment();
-            fragmentTransaction.replace(R.id.frame_layout_content_main, fragment);
+            fragmentTransaction.replace(R.id.constaint_layout_home, fragment);
             fragmentTransaction.addToBackStack("historicalFragment");
         } else if (id == R.id.nav_logout)
         {
@@ -237,8 +216,15 @@ public class HomeActivity extends AppCompatActivity
         else if (id == R.id.nav_add_new_log)
         {
             fragment = new NewLogFragment();
-            fragmentTransaction.replace(R.id.frame_layout_content_main,fragment);
+            fragmentTransaction.replace(R.id.constaint_layout_home,fragment);
             fragmentTransaction.addToBackStack("newLogFragment"); //stops fragment instead of destroying it
+        }
+        else if (id == R.id.nav_about)
+        {
+            for(int i = 0 ; i < fragmentManager.getBackStackEntryCount(); ++i)
+            {
+                fragmentManager.popBackStack();
+            }
         }
 
         if(fragment != null) {

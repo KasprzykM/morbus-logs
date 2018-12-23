@@ -110,8 +110,6 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
         initProgressBar(view);
 
 
-        initDebugData();
-
         // Add new symptom
         newSymptomButton = (Button) view.findViewById(R.id.btn_new_symptom);
         newSymptomButton.setOnClickListener(new View.OnClickListener() {
@@ -186,10 +184,7 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "Success adding symptom log to database");
-                Toast.makeText(getContext(), R.string.success_adding_toast, Toast.LENGTH_SHORT).show();
-                if(mEditMode)
-                    getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, null);
-                getActivity().getSupportFragmentManager().popBackStack();
+//                Toast.makeText(getContext(), R.string.success_adding_toast, Toast.LENGTH_SHORT).show();
                 // To refresh when we do the data swap again
                 /*if(mEditMode)
                     getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, null);
@@ -221,6 +216,10 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
             firestoreWrapper.addLogToDB(symptomsLog, onSuccessListenerDB, onFailureListenerDB);
             firestoreWrapper.uploadPhotos(symptomsLog, onSuccessListenerPhoto, onFailureListenerDB, getContext());
         }
+        if(mEditMode)
+            getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, null);
+        getActivity().getSupportFragmentManager().popBackStack();
+        mSpinnerProgress.setVisibility(View.GONE);
     }
 
     @Override
@@ -241,8 +240,8 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
     }
 
 
-    private void initDebugData()
-    {
+//    private void initDebugData()
+//    {
 //        AbnormalTempSymptom tempSymptom1 = new AbnormalTempSymptom("04/04/1996", 15L, "Minutes",
 //                "Pointless Description", 44, "Temperature");
 //
@@ -261,8 +260,8 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
 //        arrayOfSymptoms.add(painSymptom2);
 //        logAdapter.notifyDataSetChanged();
 //        checkForEmptyList();
-
-    }
+//
+//    }
 
     private void initProgressBar(View view)
     {

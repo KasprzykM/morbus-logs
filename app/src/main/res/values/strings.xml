@@ -24,7 +24,7 @@
     <string name="nav_header_desc">Navigation header</string>
 
     <!-- Home page -->
-    <string name="home_page_label">Home page</string>
+    <string name="home_page_label">Morbus</string>
 
     <!-- Terms of Service - dialog -->
     <string-array name="description_textView_tos">
@@ -94,6 +94,7 @@
     <string name="success_adding_toast">Success saving!</string>
     <string name="log_title">Title:</string>
     <string name="add_atleast_one_log_toast">Please add at least one log before saving!</string>
+    <string name="new_log_title">New Log</string>
 
 
     <!-- Historical Symptoms Fragment -->
@@ -129,7 +130,22 @@
         <item>Phantom</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- About section -->
+    <string name="greeting_txt_view">Welcome to Morbus Logs!</string>
+    <string name="explanation_txt_view">Below you can find guide on how to use this app as well as short FAQ.</string>
+    <string name="first_point_txt_view">1. How to use this app?</string>
+    <string name="first_point_explained_txt_view">This app consists of 2 core concepts: <b>Logs</b> and <b>Symptoms</b>.</string>
+    <string name="symptoms_explained_txt_view"> - <b>Symptom</b> - is everything that is happening to you, when you try to describe how you feel to a doctor.
+        Everything from running nose, raised temperature or even small headache is a <b>Symptom</b>.
+    </string>
+    <string name="logs_explained_txt_view"> - <b>Logs</b> - consist of many symptoms that you added yourself with title of your choice and the date of saving.</string>
+    <string name="saving_explained_txt_view">You can save any number of logs or symptoms, sky is the limit! Everything is saved for you and is available on any device with Morbus
+    Logs in it, you only need your google account to log in!
+    </string>
+    <string name="second_point_txt_view">2. Is Morbus supervised by medical professional?</string>
+    <string name="second_point_explained_txt_view"> No, and you should not take any advice you see before contacting any medical professional. This is a students project and for now is meant
+    for educational purposes only.</string>
+    <string name="third_point_txt_view">3. How to contact you?</string>
+    <string name="third_point_explained_txt_view">Should you have any further questions, write me an email: <b>michal0kasprzyk@gmail.com</b></string>
 
 </resources>

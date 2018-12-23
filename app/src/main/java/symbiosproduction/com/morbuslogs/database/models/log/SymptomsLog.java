@@ -41,6 +41,10 @@ public class SymptomsLog implements DBCollection,ToMap {
         return dateOfSubmission;
     }
 
+    public void setDateOfSubmission(String dateOfSubmission) {
+        this.dateOfSubmission = dateOfSubmission;
+    }
+
     public void addSymptomList(List<AbstractSymptom> listOfSymptoms)
     {
         for (AbstractSymptom symptom:

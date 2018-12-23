@@ -1,5 +1,6 @@
 package symbiosproduction.com.morbuslogs.fragments.logs;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,7 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,6 +29,8 @@ import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom
 import symbiosproduction.com.morbuslogs.fragments.logs.adapters.SympLogAdapter;
 import symbiosproduction.com.morbuslogs.fragments.logs.commInterfaces.EditHistLogCallbacksAdapter;
 
+import static android.app.Activity.RESULT_OK;
+
 
 public class HistoricalLogsFragment extends Fragment implements EditHistLogCallbacksAdapter {
 
@@ -37,12 +40,23 @@ public class HistoricalLogsFragment extends Fragment implements EditHistLogCallb
     private ArrayList<SymptomsLog> sympLogArrayList;
     private RecyclerView sympLogRecView;
     private SympLogAdapter sympLogAdapter;
+    private ProgressBar mSpinnerProgress;
 
     private static int EDIT_LOG_REQUEST_CODE_CONSTANT = 42342;
 
 
 
     public HistoricalLogsFragment() {
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK)
+        {
+            initSympLogArray();
+            initRecyclerView();
+        }
     }
 
 
@@ -56,16 +70,16 @@ public class HistoricalLogsFragment extends Fragment implements EditHistLogCallb
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        initSympLogArray(savedInstanceState);
-        initRecyclerView(view);
+        mSpinnerProgress = (ProgressBar) view.findViewById(R.id.progressBarHist);
+        sympLogRecView = (RecyclerView) view.findViewById(R.id.symptom_log_recview);
+        initSympLogArray();
+        initRecyclerView();
     }
 
-    private void initSympLogArray(Bundle savedInstanceState) {
-
+    private void initSympLogArray() {
+        mSpinnerProgress.setVisibility(View.VISIBLE);
         sympLogArrayList = new ArrayList<>();
         getLogsFromDB();
-
     }
 
     private void getLogsFromDB() {
@@ -87,15 +101,14 @@ public class HistoricalLogsFragment extends Fragment implements EditHistLogCallb
                 {
                     Log.e(TAG, "Error fetching data from database:", task.getException());
                 }
+                mSpinnerProgress.setVisibility(View.GONE);
             }
         };
         FirestoreWrapper firestoreWrapper = new FirestoreWrapper();
         firestoreWrapper.getSymptomsLog(SymptomsLog.DB_MAIN_COLLECTION, SymptomsLog.DB_SUB_COLLECTION, onCompleteListener);
     }
 
-    private void initRecyclerView(View view) {
-        // find id
-        sympLogRecView = (RecyclerView) view.findViewById(R.id.symptom_log_recview);
+    private void initRecyclerView() {
 
         // create adapter
         sympLogAdapter = new SympLogAdapter(sympLogArrayList, getContext(), this);

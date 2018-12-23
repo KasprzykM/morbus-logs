@@ -69,4 +69,18 @@ public class FirestoreWrapper{
                     .delete().addOnSuccessListener(onSuccessListener).addOnFailureListener(onFailureListener);
         }
     }
+
+
+    public void updateLogDB(SymptomsLog symptomsLog, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener)
+    {
+        FirebaseUser loggedUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (loggedUser != null) {
+            DATABASE.collection(SymptomsLog.DB_MAIN_COLLECTION)
+                    .document(loggedUser.getUid())
+                    .collection(SymptomsLog.DB_SUB_COLLECTION)
+                    .document(symptomsLog.getDateOfSubmission())
+                    .update(symptomsLog.toMap())
+                    .addOnSuccessListener(onSuccessListener).addOnFailureListener(onFailureListener);
+        }
+    }
 }

@@ -103,7 +103,7 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        mEditTitle = (EditText) view.findViewById(R.id.log_title_fragment);
         initArrayOfSymptoms(savedInstanceState);
         initRecyclerView(view);
         initProgressBar(view);
@@ -151,14 +151,7 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 mSpinnerProgress.setVisibility(View.VISIBLE);
-                                // Update Log instead of adding
-                                if(mEditMode)
-                                {
-                                        //@TODO: Finish edit mode in here
-                                }
-                                // Add symptom
-                                else
-                                    symptomsToDb();
+                                symptomsToDb();
                             }
                         });
 
@@ -187,6 +180,9 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "Success adding symptom log to database");
                 Toast.makeText(getContext(), R.string.success_adding_toast, Toast.LENGTH_SHORT).show();
+                // To refresh when we do the data swap again
+                if(mEditMode)
+                    getTargetFragment().onActivityResult(getTargetRequestCode(), RESULT_OK, null);
                 getActivity().getSupportFragmentManager().popBackStack();
                 mSpinnerProgress.setVisibility(View.GONE);
             }
@@ -199,7 +195,13 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
                 mSpinnerProgress.setVisibility(View.GONE);
             }
         };
-        firestoreWrapper.addLogToDB(symptomsLog, onSuccessListenerDB, onFailureListenerDB);
+        if(mEditMode)
+        {
+            symptomsLog.setDateOfSubmission(dateOfSubmissionToEdit);
+            firestoreWrapper.updateLogDB(symptomsLog, onSuccessListenerDB, onFailureListenerDB);
+        }
+        else
+            firestoreWrapper.addLogToDB(symptomsLog, onSuccessListenerDB, onFailureListenerDB);
 
     }
 
@@ -277,7 +279,6 @@ public class NewLogFragment extends Fragment implements EditLogCallbacksAdapter 
         // find id
         logRecView = (RecyclerView) view.findViewById(R.id.log_recycler_view);
         emptyView = (TextView) view.findViewById(R.id.empty_log_view);
-        mEditTitle = (EditText) view.findViewById(R.id.log_title_fragment);
         checkForEmptyList();
 
         // create adapter

@@ -1,7 +1,6 @@
 package symbiosproduction.com.morbuslogs.database.models.symptoms;
 
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -47,6 +46,11 @@ public abstract class AbstractSymptom implements ToMap,Parcelable {
 
     public Long getDuration() {
         return duration;
+    }
+
+    public void setSymptomName(String symptomName)
+    {
+        this.symptomName = symptomName;
     }
 
     public void setDuration(Long duration) {

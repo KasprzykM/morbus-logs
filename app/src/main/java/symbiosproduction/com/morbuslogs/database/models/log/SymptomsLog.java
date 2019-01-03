@@ -10,6 +10,7 @@ import java.util.Map;
 import symbiosproduction.com.morbuslogs.database.DBCollection;
 import symbiosproduction.com.morbuslogs.database.ToMap;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
+import symbiosproduction.com.morbuslogs.database.models.symptoms.other.OtherSymptom;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.pain.PainSymptom;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.temperature.AbnormalTempSymptom;
 
@@ -111,6 +112,9 @@ public class SymptomsLog implements DBCollection,ToMap {
                     break;
                 case "Temperature":
                     abstractSymptom = new AbnormalTempSymptom(symptomInMap);
+                    break;
+                case "Other":
+                    abstractSymptom = new OtherSymptom(symptomInMap);
                     break;
                 default:
                     break;

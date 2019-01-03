@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
@@ -23,6 +24,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.SymptomViewHolde
     private Context mContext;
     private EditLogCallbacksAdapter mEditLogCallbacksAdapter;
     private static int REQUEST_CODE_CONSTANT = 1243;
+//    private ArrayList<String> photosPathToDelete;
 
     private int lastPosition = -1;
 
@@ -31,6 +33,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.SymptomViewHolde
         this.mContext = context;
         this.dataSet = data;
         this.mEditLogCallbacksAdapter = editLogCallbacksAdapter;
+       // photosPathToDelete = new ArrayList<>();
     }
 
     class SymptomViewHolder extends RecyclerView.ViewHolder{
@@ -104,6 +107,7 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.SymptomViewHolde
                 alertDialogBuilder.setPositiveButton(R.string.confirm_delete_log_item_dialog,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                //photosPathToDelete.add(dataSet.get(position).getPhotoDbPath());
                                 dataSet.remove(position);
                                 notifyDataSetChanged();
                             }
@@ -123,6 +127,11 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.SymptomViewHolde
 
     }
 
+//    public List<String> getPhotoDBList()
+//    {
+//        return photosPathToDelete;
+//    }
+
     private void chooseIcon(SymptomViewHolder holder, String symptomName)
     {
         switch(symptomName)
@@ -132,6 +141,9 @@ public class LogAdapter extends RecyclerView.Adapter<LogAdapter.SymptomViewHolde
                 break;
             case "Temperature":
                 holder.image_view.setImageResource(R.drawable.ic_thermometer);
+                break;
+            case "Other":
+                holder.image_view.setImageResource(R.drawable.ic_medical_history);
                 break;
             default:
                 break;

@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
+import symbiosproduction.com.morbuslogs.database.models.symptoms.other.OtherSymptom;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.pain.PainSymptom;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.pain.PainType;
 import symbiosproduction.com.morbuslogs.database.models.symptoms.temperature.AbnormalTempSymptom;
@@ -197,11 +198,17 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
                 ((PainSymptomFragment) specificSymptomFragment).setSelectedPainType(painSymptomToEdit.getPainType().toString());
             }
 
-            if(specificSymptomFragment instanceof AbnormalTempSymptomFragment && symptomToEdit instanceof AbnormalTempSymptom)
+            else if(specificSymptomFragment instanceof AbnormalTempSymptomFragment && symptomToEdit instanceof AbnormalTempSymptom)
             {
                 AbnormalTempSymptom abnormalTempSymptomToEdit = (AbnormalTempSymptom) symptomToEdit;
                 ((AbnormalTempSymptomFragment) specificSymptomFragment).setTemperatureInput(abnormalTempSymptomToEdit.getTempInCelsius());
             }
+
+            else if(specificSymptomFragment instanceof OtherSymptomFragment && symptomToEdit instanceof OtherSymptom){
+                OtherSymptom otherSymptomToEdit = (OtherSymptom) symptomToEdit;
+                ((OtherSymptomFragment) specificSymptomFragment).setName(otherSymptomToEdit.getNameOfUser());
+            }
+
         }
     }
 
@@ -282,6 +289,18 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
                             filePath,
                             DB_PHOTO_PATH);
                 }
+                else if(specificSymptomFragment instanceof OtherSymptomFragment)
+                {
+                    String nameOfUser = ((OtherSymptomFragment) specificSymptomFragment).getName();
+                    symptom = new OtherSymptom(date,
+                            timeUnit,
+                            duration,
+                            description,
+                            symptomName,
+                            filePath,
+                            DB_PHOTO_PATH,
+                            nameOfUser);
+                }
 
 
                 //Go back to new log fragment
@@ -355,6 +374,12 @@ public class NewSymptomFragment extends Fragment implements AdapterView.OnItemSe
             //Abnormal Temp
             case 1: {
                 fragment = new AbnormalTempSymptomFragment();
+                break;
+            }
+            //Other symptom
+            case 2:
+            {
+                fragment = new OtherSymptomFragment();
                 break;
             }
             default:

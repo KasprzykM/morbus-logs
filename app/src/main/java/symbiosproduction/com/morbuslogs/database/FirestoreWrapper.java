@@ -25,6 +25,7 @@ import java.util.List;
 
 import symbiosproduction.com.morbuslogs.database.models.log.SymptomsLog;
 import symbiosproduction.com.morbuslogs.database.models.patient.Patient;
+import symbiosproduction.com.morbuslogs.database.models.symptoms.AbstractSymptom;
 
 public class FirestoreWrapper{
 
@@ -110,6 +111,14 @@ public class FirestoreWrapper{
         }
     }
 
+    public void deletePhotos(AbstractSymptom abstractSymptom)
+    {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        StorageReference imageReference = storageReference.child(abstractSymptom.getPhotoDbPath());
+        imageReference.delete();
+    }
+
 
     public void uploadPhotos(SymptomsLog symptomsLog, OnSuccessListener<UploadTask.TaskSnapshot> onSuccessListener, OnFailureListener onFailureListener, Context context)
     {
@@ -130,6 +139,7 @@ public class FirestoreWrapper{
             Uri imageUri = Uri.parse(photoFilePath.get(i));
             try {
                 // Fetch file from memory
+                //TODO: Fix so files larger than 4096x4096 size don't get uploaded.. no point doing it anyway
                 bitmapOfPhoto = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
 
                 // Turn it into byte array
@@ -153,7 +163,7 @@ public class FirestoreWrapper{
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference pathReference = storageRef.child(dbPath);
-        final long ONE_MEGABYTE = 1024 * 1024;
-        pathReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(onSuccessListener);
+        final long FIVE_MEGABYTES = 1024 * 1024 * 5;
+        pathReference.getBytes(FIVE_MEGABYTES).addOnSuccessListener(onSuccessListener);
     }
 }

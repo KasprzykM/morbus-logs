@@ -58,6 +58,7 @@ public final class PainSymptom extends AbstractSymptom {
     public PainSymptom(Map<String, Object> symptomInMap)
     {
         super(symptomInMap);
+        // due to one PainType being different than the other..
         this.painType = PainType.valueOf(((String)symptomInMap.get("painType")).toUpperCase().replace(" ", "_"));
         this.intensity = (String) symptomInMap.get("intensity");
     }

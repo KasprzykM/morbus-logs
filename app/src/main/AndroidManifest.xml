@@ -39,7 +39,8 @@
             android:label="@string/home_page_label"
             android:icon="@drawable/morbus_icon"
             android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme.GenericActivity">
+            android:theme="@style/AppTheme.GenericActivity"
+            android:screenOrientation="portrait">
         </activity>
 
 

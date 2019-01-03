@@ -50,6 +50,7 @@
     <string-array name="symptom_array">
         <item>Pain</item>
         <item>Temperature</item>
+        <item>Other</item>
     </string-array>
     <string name="symptom_name">Choose symptom:</string>
     <string name="date_chooser_symptom">Date of Occurrence:</string>
@@ -147,5 +148,8 @@
     for educational purposes only.</string>
     <string name="third_point_txt_view">3. How to contact you?</string>
     <string name="third_point_explained_txt_view">Should you have any further questions, write me an email: <b>michal0kasprzyk@gmail.com</b></string>
+
+    <!-- Other Fragment -->
+    <string name="name_other_symptom">Specify name:</string>
 
 </resources>

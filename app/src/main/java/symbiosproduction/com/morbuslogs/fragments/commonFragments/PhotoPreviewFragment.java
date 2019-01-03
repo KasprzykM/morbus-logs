@@ -17,7 +17,9 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.IOException;
 import symbiosproduction.com.morbuslogs.R;
 import symbiosproduction.com.morbuslogs.database.FirestoreWrapper;
@@ -27,6 +29,8 @@ public class PhotoPreviewFragment extends Fragment {
     Bitmap bitmap;
     ImageView imageToPreview;
     ProgressBar spinner;
+    private final int MAX_HEIGHT = 4096;
+    private final int MAX_WIDTH = 4096;
 
 
     public PhotoPreviewFragment() {
@@ -50,12 +54,19 @@ public class PhotoPreviewFragment extends Fragment {
         spinner.setVisibility(View.VISIBLE);
         if(bitmap != null)
         {
+            checkSize();
             imageToPreview.setImageBitmap(bitmap);
             spinner.setVisibility(View.GONE);
         }
     }
 
-    public void setFilePath(String filePath, Context context, String optionalDbPath) {
+    public void resizeBitmap() {
+        bitmap = Bitmap.createScaledBitmap(bitmap, MAX_WIDTH / 2, MAX_HEIGHT / 2 , false);
+    }
+
+
+
+    public void setFilePath(String filePath, final Context context, String optionalDbPath) {
         Uri imageUri = Uri.parse(filePath);
         try {
             bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), imageUri);
@@ -66,6 +77,7 @@ public class PhotoPreviewFragment extends Fragment {
                 @Override
                 public void onSuccess(byte[] bytes) {
                     bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    checkSize();
                     imageToPreview.setImageBitmap(bitmap);
                     spinner.setVisibility(View.GONE);
                 }
@@ -73,6 +85,14 @@ public class PhotoPreviewFragment extends Fragment {
         }catch (IllegalStateException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    public void checkSize()
+    {
+        if(bitmap.getHeight() > MAX_HEIGHT || bitmap.getWidth() > MAX_WIDTH)
+        {
+            resizeBitmap();
         }
     }
 }

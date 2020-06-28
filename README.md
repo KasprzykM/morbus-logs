@@ -2,7 +2,7 @@
 No longer supported and maintained. As it does require active Firebase DB the original app will no longer work. 
 
 # Morbus Logs
-Morbus was designed as a fun offsite students project to learn Android programming while also making app that is somewhat useable. 
+Morbus was designed as a fun offsite students project to learn Android programming while also making app that is somewhat usable. 
 Its goal was to provide patients with ability to log progress of their disease in more structured manner: consisting of log entires, that can contain multiple symptoms each.
 Each symptom entry would store more details about said symptom as well as picture (should one be needed, for example rash / or broken leg).
 
